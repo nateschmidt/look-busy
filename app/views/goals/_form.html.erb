@@ -1,0 +1,39 @@
+<%= form_with(model: goal, local: true) do |form| %>
+  <% if goal.errors.any? %>
+    <div class="alert alert-danger">
+      <h4><%= pluralize(goal.errors.count, "error") %> prohibited this goal from being saved:</h4>
+      <ul class="mb-0">
+        <% goal.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.label :description, class: "form-label" do %>
+      <i class="bi bi-target me-1"></i>Goal Description
+    <% end %>
+    <%= form.text_field :description, class: "form-control", placeholder: "e.g., Add investors to database, Make sales calls, Write blog posts" %>
+    <div class="form-text">Describe what you want to accomplish each week.</div>
+  </div>
+
+  <div class="mb-4">
+    <%= form.label :target_count, class: "form-label" do %>
+      <i class="bi bi-number me-1"></i>Target Count (per week)
+    <% end %>
+    <%= form.number_field :target_count, class: "form-control", min: 1, placeholder: "e.g., 10" %>
+    <div class="form-text">How many times do you want to do this per week?</div>
+  </div>
+
+  <div class="d-flex gap-2">
+    <%= form.submit class: "btn btn-primary" do %>
+      <i class="bi bi-check-circle me-1"></i>
+      <%= goal.new_record? ? 'Create Goal' : 'Update Goal' %>
+    <% end %>
+    
+    <%= link_to goals_path, class: "btn btn-outline-secondary" do %>
+      <i class="bi bi-arrow-left me-1"></i>Cancel
+    <% end %>
+  </div>
+<% end %>

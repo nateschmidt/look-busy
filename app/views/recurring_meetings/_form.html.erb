@@ -1,0 +1,122 @@
+<%= form_with(model: recurring_meeting, local: true) do |form| %>
+  <% if recurring_meeting.errors.any? %>
+    <div class="alert alert-danger">
+      <h4><%= pluralize(recurring_meeting.errors.count, "error") %> prohibited this meeting from being saved:</h4>
+      <ul class="mb-0">
+        <% recurring_meeting.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.label :name, class: "form-label" do %>
+      <i class="bi bi-calendar-event me-1"></i>Meeting Name
+    <% end %>
+    <%= form.text_field :name, class: "form-control", placeholder: "e.g., Weekly Standup, Monthly Review" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :person, class: "form-label" do %>
+      <i class="bi bi-person me-1"></i>Person You're Meeting With
+    <% end %>
+    <%= form.text_field :person, class: "form-control", placeholder: "e.g., John Smith, Sarah Johnson" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :frequency, class: "form-label" do %>
+      <i class="bi bi-clock me-1"></i>Meeting Frequency
+    <% end %>
+    <%= form.select :frequency, 
+        options_for_select([
+          ['Weekly', 'weekly'],
+          ['Bi-weekly', 'bi_weekly'],
+          ['Monthly', 'monthly'],
+          ['Quarterly', 'quarterly']
+        ], recurring_meeting.frequency),
+        { prompt: 'Select frequency' },
+        { class: "form-select", id: "frequency-select" } %>
+    <div class="form-text">Select the frequency to see additional timing options below.</div>
+  </div>
+
+  <!-- Bi-weekly pattern -->
+  <div class="mb-3" id="biweekly-pattern-group">
+    <div class="card" id="biweekly-card">
+      <div class="card-header" id="biweekly-header">
+        <i class="bi bi-calendar-week me-1"></i>Bi-weekly Timing
+      </div>
+      <div class="card-body">
+        <%= form.label :biweekly_pattern, class: "form-label" do %>
+          <i class="bi bi-calendar-week me-1"></i>Which weeks of the month?
+        <% end %>
+        <%= form.select :biweekly_pattern, 
+            options_for_select([
+              ['1st & 3rd weeks of month', 'first_third'],
+              ['2nd & 4th weeks of month', 'second_fourth']
+            ], recurring_meeting.biweekly_pattern),
+            { prompt: 'Select pattern' },
+            { class: "form-select" } %>
+        <div class="form-text">Choose which weeks of each month this meeting occurs.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Week of month -->
+  <div class="mb-3" id="week-of-month-group">
+    <div class="card" id="week-of-month-card">
+      <div class="card-header" id="week-of-month-header">
+        <i class="bi bi-calendar-week me-1"></i>Week of Month
+      </div>
+      <div class="card-body">
+        <%= form.label :week_of_month, class: "form-label" do %>
+          <i class="bi bi-calendar-week me-1"></i>Which week of the month?
+        <% end %>
+        <%= form.select :week_of_month, 
+            options_for_select([
+              ['1st week', 1],
+              ['2nd week', 2],
+              ['3rd week', 3],
+              ['4th week', 4]
+            ], recurring_meeting.week_of_month),
+            { prompt: 'Select week' },
+            { class: "form-select" } %>
+        <div class="form-text">Choose which week of the month this meeting occurs.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Month of quarter -->
+  <div class="mb-4" id="month-of-quarter-group">
+    <div class="card" id="month-of-quarter-card">
+      <div class="card-header" id="month-of-quarter-header">
+        <i class="bi bi-calendar-month me-1"></i>Month of Quarter
+      </div>
+      <div class="card-body">
+        <%= form.label :month_of_quarter, class: "form-label" do %>
+          <i class="bi bi-calendar-month me-1"></i>Which month of the quarter?
+        <% end %>
+        <%= form.select :month_of_quarter, 
+            options_for_select([
+              ['1st month of quarter', 1],
+              ['2nd month of quarter', 2],
+              ['3rd month of quarter', 3]
+            ], recurring_meeting.month_of_quarter),
+            { prompt: 'Select month' },
+            { class: "form-select" } %>
+        <div class="form-text">Choose which month of each quarter this meeting occurs.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex gap-2">
+    <%= form.submit class: "btn btn-primary" do %>
+      <i class="bi bi-check-circle me-1"></i>
+      <%= recurring_meeting.new_record? ? 'Create Meeting' : 'Update Meeting' %>
+    <% end %>
+    
+    <%= link_to recurring_meetings_path, class: "btn btn-outline-secondary" do %>
+      <i class="bi bi-arrow-left me-1"></i>Cancel
+    <% end %>
+  </div>
+<% end %>

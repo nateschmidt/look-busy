@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>LookBusy</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+      function updateFormFields() {
+        const frequencySelect = document.getElementById('frequency-select');
+        if (!frequencySelect) return;
+        
+        const frequency = frequencySelect.value;
+        
+        // Get all the cards and headers
+        const biweeklyCard = document.getElementById('biweekly-card');
+        const biweeklyHeader = document.getElementById('biweekly-header');
+        const weekOfMonthCard = document.getElementById('week-of-month-card');
+        const weekOfMonthHeader = document.getElementById('week-of-month-header');
+        const monthOfQuarterCard = document.getElementById('month-of-quarter-card');
+        const monthOfQuarterHeader = document.getElementById('month-of-quarter-header');
+        
+        // Reset all cards to inactive state
+        [biweeklyCard, weekOfMonthCard, monthOfQuarterCard].forEach(card => {
+          if (card) {
+            card.className = 'card border-secondary';
+            card.style.opacity = '0.5';
+          }
+        });
+        
+        [biweeklyHeader, weekOfMonthHeader, monthOfQuarterHeader].forEach(header => {
+          if (header) {
+            header.className = 'card-header bg-secondary text-white';
+          }
+        });
+        
+        // Activate relevant cards based on frequency
+        switch(frequency) {
+          case 'bi_weekly':
+            if (biweeklyCard) {
+              biweeklyCard.className = 'card border-primary';
+              biweeklyCard.style.opacity = '1';
+            }
+            if (biweeklyHeader) {
+              biweeklyHeader.className = 'card-header bg-primary text-white';
+            }
+            break;
+          case 'monthly':
+            if (weekOfMonthCard) {
+              weekOfMonthCard.className = 'card border-primary';
+              weekOfMonthCard.style.opacity = '1';
+            }
+            if (weekOfMonthHeader) {
+              weekOfMonthHeader.className = 'card-header bg-primary text-white';
+            }
+            break;
+          case 'quarterly':
+            if (weekOfMonthCard) {
+              weekOfMonthCard.className = 'card border-primary';
+              weekOfMonthCard.style.opacity = '1';
+            }
+            if (weekOfMonthHeader) {
+              weekOfMonthHeader.className = 'card-header bg-primary text-white';
+            }
+            if (monthOfQuarterCard) {
+              monthOfQuarterCard.className = 'card border-primary';
+              monthOfQuarterCard.style.opacity = '1';
+            }
+            if (monthOfQuarterHeader) {
+              monthOfQuarterHeader.className = 'card-header bg-primary text-white';
+            }
+            break;
+          case 'weekly':
+            // All cards stay inactive for weekly
+            break;
+        }
+      }
+      
+      // Run on page load
+      document.addEventListener('DOMContentLoaded', updateFormFields);
+      document.addEventListener('turbo:load', updateFormFields);
+      
+      // Run when frequency changes
+      document.addEventListener('DOMContentLoaded', function() {
+        const frequencySelect = document.getElementById('frequency-select');
+        if (frequencySelect) {
+          frequencySelect.addEventListener('change', updateFormFields);
+        }
+      });
+      
+      document.addEventListener('turbo:load', function() {
+        const frequencySelect = document.getElementById('frequency-select');
+        if (frequencySelect) {
+          frequencySelect.addEventListener('change', updateFormFields);
+        }
+      });
+    </script>
+    
+        <script>
+      // Todo card interactions with note modal
+      document.addEventListener('DOMContentLoaded', function() {
+        setupTodoInteractions();
+      });
+
+      // Also run when Turbo loads the page
+      document.addEventListener('turbo:load', function() {
+        setupTodoInteractions();
+      });
+
+      function setupTodoInteractions() {
+        const todoCheckboxes = document.querySelectorAll('.todo-checkbox');
+
+        todoCheckboxes.forEach(function(checkbox) {
+          checkbox.addEventListener('change', function() {
+            const card = this.closest('.todo-card');
+            const cardTitle = card.querySelector('.card-title');
+            const todoId = this.dataset.todoId;
+
+            if (this.checked) {
+              // Show the note modal for all todo items
+              document.getElementById('note_notable_type').value = 'TodoItem';
+              document.getElementById('note_notable_id').value = todoId;
+              
+              // Show the modal
+              const modal = new bootstrap.Modal(document.getElementById('noteModal'));
+              modal.show();
+              
+              // Uncheck the checkbox until the note is submitted
+              this.checked = false;
+            } else {
+              card.classList.remove('completed');
+              cardTitle.style.textDecoration = 'none';
+            }
+          });
+        });
+
+        // Make entire card clickable
+        const todoCards = document.querySelectorAll('.todo-card');
+        todoCards.forEach(function(card) {
+          card.addEventListener('click', function(e) {
+            // Don't trigger if clicking on the checkbox itself
+            if (e.target.type !== 'checkbox') {
+              const checkbox = this.querySelector('input[type="checkbox"]');
+              checkbox.checked = !checkbox.checked;
+              checkbox.dispatchEvent(new Event('change'));
+            }
+          });
+        });
+
+        // Handle modal form submission
+        const noteForm = document.getElementById('noteForm');
+        if (noteForm) {
+          noteForm.addEventListener('submit', function() {
+            // The form will submit normally and redirect back to the dashboard
+            // The note will be created and the todo will be marked as completed
+          });
+        }
+      }
+    </script>
+  </head>
+
+  <body class="<%= @body_class %> d-flex flex-column min-vh-100">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="/">
+          <i class="bi bi-clock me-2"></i>Look Busy
+        </a>
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/">Home</a>
+            </li>
+            <% if user_signed_in? %>
+              <li class="nav-item">
+                <%= link_to "Weekly", weekly_dashboard_path, class: "nav-link" %>
+              </li>
+              <li class="nav-item">
+                <%= link_to "Meetings", recurring_meetings_path, class: "nav-link" %>
+              </li>
+              <li class="nav-item">
+                <%= link_to "Goals", goals_path, class: "nav-link" %>
+              </li>
+            <% end %>
+          </ul>
+          
+          <ul class="navbar-nav">
+            <% if user_signed_in? %>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="bi bi-person-circle me-1"></i><%= current_user.email %>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                  <li><%= link_to "Profile", "#", class: "dropdown-item" %></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><%= link_to "Logout", destroy_user_session_path, method: :delete, class: "dropdown-item" %></li>
+                </ul>
+              </li>
+            <% else %>
+              <li class="nav-item">
+                <%= link_to "Login", new_user_session_path, class: "nav-link" %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    <% if notice %>
+      <div class="alert alert-info alert-dismissible fade show m-3" role="alert">
+        <i class="bi bi-info-circle me-2"></i><%= notice %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% end %>
+    
+    <% if alert %>
+      <div class="alert alert-danger alert-dismissible fade show m-3" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i><%= alert %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% end %>
+
+    <!-- Main Content -->
+    <main class="flex-grow-1">
+      <%= yield %>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4 mt-auto">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <h5 class="mb-3">Look Busy</h5>
+            <p class="text-muted mb-0">Because sometimes you just need to appear productive.</p>
+          </div>
+          <div class="col-md-6 text-md-end">
+            <p class="text-muted mb-0">
+              <small>&copy; <%= Date.current.year %> Look Busy. All rights reserved.</small>
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

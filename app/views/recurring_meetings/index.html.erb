@@ -1,0 +1,60 @@
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2 mb-0">
+      <i class="bi bi-calendar-event me-2"></i>Recurring Meetings
+    </h1>
+    <%= link_to new_recurring_meeting_path, class: "btn btn-primary" do %>
+      <i class="bi bi-plus-circle me-1"></i>Add Meeting
+    <% end %>
+  </div>
+
+  <% if @recurring_meetings.any? %>
+    <div class="row">
+      <% @recurring_meetings.each do |meeting| %>
+        <div class="col-md-6 col-lg-4 mb-4">
+          <div class="card h-100 shadow-sm">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h5 class="card-title mb-0"><%= meeting.name %></h5>
+                <div class="text-end">
+                  <span class="badge bg-primary mb-1"><%= meeting.frequency_display %></span>
+                  <% if meeting.is_meeting_this_week? %>
+                    <span class="badge bg-success">This Week</span>
+                  <% end %>
+                </div>
+              </div>
+              <p class="card-text text-muted mb-3">
+                <i class="bi bi-person me-1"></i><%= meeting.person %>
+              </p>
+              <p class="card-text small text-muted">
+                <i class="bi bi-calendar me-1"></i>Next: <%= meeting.next_meeting_date.strftime("%B %d, %Y") %>
+              </p>
+            </div>
+            <div class="card-footer bg-transparent border-top-0">
+              <div class="btn-group w-100" role="group">
+                <%= link_to recurring_meeting_path(meeting), class: "btn btn-outline-primary btn-sm" do %>
+                  <i class="bi bi-eye me-1"></i>View
+                <% end %>
+                <%= link_to edit_recurring_meeting_path(meeting), class: "btn btn-outline-secondary btn-sm" do %>
+                  <i class="bi bi-pencil me-1"></i>Edit
+                <% end %>
+                <%= link_to recurring_meeting_path(meeting), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-outline-danger btn-sm" do %>
+                  <i class="bi bi-trash me-1"></i>Delete
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="text-center py-5">
+      <i class="bi bi-calendar-x display-1 text-muted mb-3"></i>
+      <h3 class="text-muted">No recurring meetings yet</h3>
+      <p class="text-muted mb-4">Start tracking your recurring meetings to stay organized.</p>
+      <%= link_to new_recurring_meeting_path, class: "btn btn-primary btn-lg" do %>
+        <i class="bi bi-plus-circle me-1"></i>Add Your First Meeting
+      <% end %>
+    </div>
+  <% end %>
+</div>
