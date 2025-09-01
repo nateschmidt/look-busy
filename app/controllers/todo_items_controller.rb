@@ -14,8 +14,8 @@ class TodoItemsController < ApplicationController
 
   def update
     if @todo_item.update(todo_item_params)
-      # Track goal completion if this is a goal-related todo item
-      if @todo_item.source_type == 'Goal' && @todo_item.completed?
+      # Track goal completion changes for goal-related todo items
+      if @todo_item.source_type == 'Goal'
         track_goal_completion(@todo_item.source, @todo_item.week_start_date)
       end
       

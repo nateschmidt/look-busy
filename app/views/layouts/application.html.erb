@@ -107,7 +107,6 @@
       // Initialize dark mode on page load
       document.addEventListener('DOMContentLoaded', initDarkMode);
       document.addEventListener('turbo:load', initDarkMode);
-
       function updateFormFields() {
         const frequencySelect = document.getElementById('frequency-select');
         if (!frequencySelect) return;
@@ -247,10 +246,8 @@
               // Uncheck the checkbox until the note is submitted
               this.checked = false;
             } else {
-              // Handle unchecking - this shouldn't happen for completed tasks
-              // but we'll handle it gracefully
-              card.classList.remove('completed');
-              cardTitle.classList.remove('text-decoration-line-through', 'text-muted');
+              // Handle unchecking - update the todo item directly
+              updateTodoItem(todoId, false);
             }
           });
         });
@@ -264,14 +261,10 @@
             // Don't trigger if clicking on the checkbox itself
             if (e.target.type !== 'checkbox') {
               const checkbox = this.querySelector('input[type="checkbox"]');
-              // Don't allow toggling if the task is already completed
-              if (!checkbox.checked) {
-                console.log('Toggling checkbox');
-                checkbox.checked = !checkbox.checked;
-                checkbox.dispatchEvent(new Event('change'));
-              } else {
-                console.log('Task already completed, not allowing toggle');
-              }
+              // Allow toggling for all tasks now
+              console.log('Toggling checkbox');
+              checkbox.checked = !checkbox.checked;
+              checkbox.dispatchEvent(new Event('change'));
             }
           });
         });
@@ -466,6 +459,51 @@
           } else {
             console.error('Modal element not found in test');
           }
+        }
+
+        // Function to update todo item completion status directly
+        function updateTodoItem(todoId, completed) {
+          const formData = new FormData();
+          formData.append('todo_item[completed]', completed);
+          formData.append('authenticity_token', document.querySelector('meta[name="csrf-token"]').content);
+          
+          fetch(`/todo_items/${todoId}`, {
+            method: 'PATCH',
+            body: formData,
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest'
+            }
+          })
+          .then(response => {
+            if (response.ok) {
+              // Update the UI to reflect the change
+              const checkbox = document.querySelector(`input[data-todo-id="${todoId}"]`);
+              const card = checkbox.closest('.todo-card');
+              const cardTitle = card.querySelector('.card-title');
+              
+              if (completed) {
+                card.classList.add('completed');
+                cardTitle.classList.add('text-decoration-line-through', 'text-muted');
+              } else {
+                card.classList.remove('completed');
+                cardTitle.classList.remove('text-decoration-line-through', 'text-muted');
+              }
+              
+              // Reload the page to update goal statistics
+              window.location.reload();
+            } else {
+              console.error('Failed to update todo item');
+              // Revert the checkbox state
+              const checkbox = document.querySelector(`input[data-todo-id="${todoId}"]`);
+              checkbox.checked = !completed;
+            }
+          })
+          .catch(error => {
+            console.error('Error updating todo item:', error);
+            // Revert the checkbox state
+            const checkbox = document.querySelector(`input[data-todo-id="${todoId}"]`);
+            checkbox.checked = !completed;
+          });
         }
       </script>
   </head>
