@@ -11,9 +11,12 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.1].define(version: 2025_09_01_204013) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "ad_hoc_todos", force: :cascade do |t|
     t.text "description", null: false
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.boolean "completed", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -21,7 +24,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_01_204013) do
   end
 
   create_table "goal_completions", force: :cascade do |t|
-    t.integer "goal_id", null: false
+    t.bigint "goal_id", null: false
     t.date "week_start_date"
     t.integer "completed_count"
     t.integer "week_number"
@@ -34,19 +37,19 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_01_204013) do
   create_table "goals", force: :cascade do |t|
     t.string "description", null: false
     t.integer "target_count", default: 1, null: false
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "active"
+    t.boolean "active", default: true, null: false
     t.index ["user_id", "description"], name: "index_goals_on_user_id_and_description", unique: true
     t.index ["user_id"], name: "index_goals_on_user_id"
   end
 
   create_table "notes", force: :cascade do |t|
     t.text "content", null: false
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.string "notable_type", null: false
-    t.integer "notable_id", null: false
+    t.bigint "notable_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["notable_type", "notable_id"], name: "index_notes_on_notable"
@@ -57,7 +60,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_01_204013) do
     t.string "name", null: false
     t.string "person", null: false
     t.integer "frequency", default: 0, null: false
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "week_of_month", default: 1
@@ -69,7 +72,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_01_204013) do
 
   create_table "todo_items", force: :cascade do |t|
     t.text "description", null: false
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.string "source_type", null: false
     t.integer "source_id", null: false
     t.boolean "completed", default: false, null: false
