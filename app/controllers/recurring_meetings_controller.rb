@@ -46,6 +46,6 @@ class RecurringMeetingsController < ApplicationController
   end
 
   def recurring_meeting_params
-    params.require(:recurring_meeting).permit(:name, :frequency, :week_of_month, :month_of_quarter, :biweekly_pattern)
+    params.require(:recurring_meeting).permit(:name, :person, :frequency, :week_of_month, :month_of_quarter, :biweekly_pattern)
   end
 end
