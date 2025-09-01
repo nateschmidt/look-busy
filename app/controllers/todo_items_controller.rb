@@ -42,11 +42,12 @@ class TodoItemsController < ApplicationController
   def track_goal_completion(goal, week_start_date)
     completion = goal.completion_for_week(week_start_date)
     
-    # Count completed todo items for this goal in this week
+    # Count completed todo items for this goal in this week, including the current one
     completed_count = current_user.todo_items
                                  .where(source: goal, week_start_date: week_start_date, completed: true)
                                  .count
     
+    # Update the completion record with the correct count
     completion.update(completed_count: completed_count)
   end
 end
