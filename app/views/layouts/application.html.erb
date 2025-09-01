@@ -261,10 +261,18 @@
             // Don't trigger if clicking on the checkbox itself
             if (e.target.type !== 'checkbox') {
               const checkbox = this.querySelector('input[type="checkbox"]');
-              // Allow toggling for all tasks now
-              console.log('Toggling checkbox');
-              checkbox.checked = !checkbox.checked;
-              checkbox.dispatchEvent(new Event('change'));
+              const todoId = checkbox.dataset.todoId;
+              
+              // If the item is already completed, uncheck it
+              if (checkbox.checked) {
+                console.log('Unchecking completed todo item');
+                updateTodoItem(todoId, false);
+              } else {
+                // If the item is not completed, check it (which will show the note modal)
+                console.log('Checking incomplete todo item');
+                checkbox.checked = true;
+                checkbox.dispatchEvent(new Event('change'));
+              }
             }
           });
         });
