@@ -47,6 +47,28 @@ class RecurringMeeting < ApplicationRecord
     end
   end
   
+  def should_occur_in_week?(week_start_date)
+    case frequency
+    when 'weekly'
+      true
+    when 'bi_weekly'
+      week_in_month = ((week_start_date.day - 1) / 7) + 1
+      case biweekly_pattern
+      when 'first_third'
+        [1, 3].include?(week_in_month)
+      when 'second_fourth'
+        [2, 4].include?(week_in_month)
+      end
+    when 'monthly'
+      week_in_month = ((week_start_date.day - 1) / 7) + 1
+      week_in_month == week_of_month
+    when 'quarterly'
+      quarter_month = ((week_start_date.month - 1) % 3) + 1
+      week_in_month = ((week_start_date.day - 1) / 7) + 1
+      quarter_month == month_of_quarter && week_in_month == week_of_month
+    end
+  end
+  
   def next_meeting_date
     case frequency
     when 'weekly'
@@ -61,29 +83,7 @@ class RecurringMeeting < ApplicationRecord
   end
   
   def is_meeting_this_week?
-    current_week = Date.current.cweek
-    current_month = Date.current.month
-    current_year = Date.current.year
-    
-    case frequency
-    when 'weekly'
-      true
-    when 'bi_weekly'
-      week_in_month = ((Date.current.day - 1) / 7) + 1
-      case biweekly_pattern
-      when 'first_third'
-        [1, 3].include?(week_in_month)
-      when 'second_fourth'
-        [2, 4].include?(week_in_month)
-      end
-    when 'monthly'
-      week_in_month = ((Date.current.day - 1) / 7) + 1
-      week_in_month == week_of_month
-    when 'quarterly'
-      quarter_month = ((current_month - 1) % 3) + 1
-      week_in_month = ((Date.current.day - 1) / 7) + 1
-      quarter_month == month_of_quarter && week_in_month == week_of_month
-    end
+    should_occur_in_week?(Date.current)
   end
   
   private
