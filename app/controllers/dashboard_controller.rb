@@ -37,10 +37,25 @@ class DashboardController < ApplicationController
     week = params[:week].to_i
     week_start_date = Date.commercial(year, week, 1)
     
+    # Delete all todo items for this week
     current_user.todo_items.where(week_start_date: week_start_date).destroy_all
+    
+    # Reset goal completion statistics for this week
+    current_user.goals.each do |goal|
+      completion = goal.completion_for_week(week_start_date)
+      completion.update(completed_count: 0)
+    end
+    
+    # Also clear any old goal completion records that might have non-zero counts
+    # This ensures the Goals page shows accurate statistics
+    current_user.goals.each do |goal|
+      goal.goal_completions.where.not(completed_count: 0).update_all(completed_count: 0)
+    end
     
     redirect_to weekly_dashboard_path(year: year, week: week)
   end
+
+
 
   def weekly_report
     @selected_year = params[:year]&.to_i || Date.current.year

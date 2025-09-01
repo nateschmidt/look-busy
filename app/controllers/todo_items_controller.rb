@@ -19,9 +19,18 @@ class TodoItemsController < ApplicationController
         track_goal_completion(@todo_item.source, @todo_item.week_start_date)
       end
       
-      redirect_back(fallback_location: dashboard_weekly_path)
+      # Handle AJAX requests differently
+      if request.xhr?
+        render json: { success: true, completed: @todo_item.completed? }
+      else
+        redirect_back(fallback_location: dashboard_weekly_path)
+      end
     else
-      redirect_back(fallback_location: dashboard_weekly_path, alert: 'Failed to update to-do item.')
+      if request.xhr?
+        render json: { success: false, errors: @todo_item.errors.full_messages }, status: :unprocessable_entity
+      else
+        redirect_back(fallback_location: dashboard_weekly_path, alert: 'Failed to update to-do item.')
+      end
     end
   end
 
@@ -42,12 +51,11 @@ class TodoItemsController < ApplicationController
   def track_goal_completion(goal, week_start_date)
     completion = goal.completion_for_week(week_start_date)
     
-    # Count completed todo items for this goal in this week, including the current one
+    # Count completed todo items for this goal in this week
     completed_count = current_user.todo_items
                                  .where(source: goal, week_start_date: week_start_date, completed: true)
                                  .count
     
-    # Update the completion record with the correct count
     completion.update(completed_count: completed_count)
   end
 end

@@ -213,67 +213,14 @@
         const todoCheckboxes = document.querySelectorAll('.todo-checkbox');
         console.log('Found', todoCheckboxes.length, 'checkboxes');
 
+        // Simple checkbox change handlers - no modal interaction
         todoCheckboxes.forEach(function(checkbox) {
-          checkbox.addEventListener('change', function() {
+          checkbox.addEventListener('change', function(e) {
             console.log('Checkbox changed:', this.checked);
-            const card = this.closest('.todo-card');
-            const cardTitle = card.querySelector('.card-title');
             const todoId = this.dataset.todoId;
-            console.log('Todo ID:', todoId);
-
-            if (this.checked) {
-              // Always show the note modal for all todo items
-              const notableTypeField = document.getElementById('note_notable_type');
-              const notableIdField = document.getElementById('note_notable_id');
-              
-              if (notableTypeField && notableIdField) {
-                notableTypeField.value = 'TodoItem';
-                notableIdField.value = todoId;
-                
-                // Show the modal
-                const modalElement = document.getElementById('noteModal');
-                if (modalElement) {
-                  const modal = new bootstrap.Modal(modalElement);
-                  modal.show();
-                  console.log('Modal should be showing');
-                } else {
-                  console.error('Modal element not found');
-                }
-              } else {
-                console.error('Modal form fields not found');
-              }
-              
-              // Uncheck the checkbox until the note is submitted
-              this.checked = false;
-            } else {
-              // Handle unchecking - update the todo item directly
-              updateTodoItem(todoId, false);
-            }
-          });
-        });
-
-        // Make entire card clickable
-        const todoCards = document.querySelectorAll('.todo-card');
-        console.log('Found', todoCards.length, 'todo cards');
-        todoCards.forEach(function(card) {
-          card.addEventListener('click', function(e) {
-            console.log('Card clicked, target:', e.target.type);
-            // Don't trigger if clicking on the checkbox itself
-            if (e.target.type !== 'checkbox') {
-              const checkbox = this.querySelector('input[type="checkbox"]');
-              const todoId = checkbox.dataset.todoId;
-              
-              // If the item is already completed, uncheck it
-              if (checkbox.checked) {
-                console.log('Unchecking completed todo item');
-                updateTodoItem(todoId, false);
-              } else {
-                // If the item is not completed, check it (which will show the note modal)
-                console.log('Checking incomplete todo item');
-                checkbox.checked = true;
-                checkbox.dispatchEvent(new Event('change'));
-              }
-            }
+            
+            // Update the todo item directly
+            updateTodoItem(todoId, this.checked);
           });
         });
 
@@ -282,7 +229,7 @@
         if (noteForm) {
           noteForm.addEventListener('submit', function() {
             // The form will submit normally and redirect back to the dashboard
-            // The note will be created and the todo will be marked as completed
+            // The note will be created/updated without affecting the todo completion status
           });
         }
 
@@ -445,6 +392,8 @@
           }
         }
 
+
+
         function cleanupModal() {
           // Remove any existing modal backdrops
           const backdrops = document.querySelectorAll('.modal-backdrop');
@@ -471,9 +420,14 @@
 
         // Function to update todo item completion status directly
         function updateTodoItem(todoId, completed) {
+          console.log('updateTodoItem called with:', { todoId, completed });
+          
           const formData = new FormData();
           formData.append('todo_item[completed]', completed);
           formData.append('authenticity_token', document.querySelector('meta[name="csrf-token"]').content);
+          
+          console.log('Sending request to:', `/todo_items/${todoId}`);
+          console.log('Form data:', Object.fromEntries(formData));
           
           fetch(`/todo_items/${todoId}`, {
             method: 'PATCH',
@@ -483,24 +437,24 @@
             }
           })
           .then(response => {
+            console.log('Response status:', response.status);
+            console.log('Response ok:', response.ok);
+            
             if (response.ok) {
-              // Update the UI to reflect the change
-              const checkbox = document.querySelector(`input[data-todo-id="${todoId}"]`);
-              const card = checkbox.closest('.todo-card');
-              const cardTitle = card.querySelector('.card-title');
-              
-              if (completed) {
-                card.classList.add('completed');
-                cardTitle.classList.add('text-decoration-line-through', 'text-muted');
-              } else {
-                card.classList.remove('completed');
-                cardTitle.classList.remove('text-decoration-line-through', 'text-muted');
-              }
-              
-              // Reload the page to update goal statistics
+              return response.json();
+            } else {
+              throw new Error('Network response was not ok');
+            }
+          })
+          .then(data => {
+            console.log('Response data:', data);
+            
+            if (data.success) {
+              console.log('Request successful, reloading page...');
+              // Reload the page to update goal statistics and UI
               window.location.reload();
             } else {
-              console.error('Failed to update todo item');
+              console.error('Failed to update todo item:', data.errors);
               // Revert the checkbox state
               const checkbox = document.querySelector(`input[data-todo-id="${todoId}"]`);
               checkbox.checked = !completed;

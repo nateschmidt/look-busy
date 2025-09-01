@@ -3,7 +3,7 @@ class GoalsController < ApplicationController
   before_action :set_goal, only: [:show, :edit, :update, :destroy, :toggle_active]
 
   def index
-    @goals = current_user.goals.ordered
+    @goals = current_user.goals.ordered.includes(:goal_completions)
   end
 
   def show

@@ -5,25 +5,8 @@ class NotesController < ApplicationController
   def create
     @note = current_user.notes.build(note_params)
     
-    # If content is blank, just mark the todo as completed without creating a note
-    if @note.content.blank? && @note.notable_type == 'TodoItem'
-      @note.notable.update(completed: true)
-      # Track goal completion if this is a goal-related todo item
-      if @note.notable.source_type == 'Goal'
-        track_goal_completion(@note.notable.source, @note.notable.week_start_date)
-      end
-      redirect_to weekly_dashboard_path, notice: 'Item marked as completed!'
-    elsif @note.save
-      # Mark the associated todo item as completed
-      if @note.notable_type == 'TodoItem'
-        @note.notable.update(completed: true)
-        # Track goal completion if this is a goal-related todo item
-        if @note.notable.source_type == 'Goal'
-          track_goal_completion(@note.notable.source, @note.notable.week_start_date)
-        end
-      end
-      
-      redirect_to weekly_dashboard_path, notice: 'Note added and item marked as completed!'
+    if @note.save
+      redirect_to weekly_dashboard_path, notice: 'Note added successfully!'
     else
       redirect_to weekly_dashboard_path, alert: 'Failed to add note.'
     end
