@@ -8,15 +8,11 @@ class DashboardController < ApplicationController
     @current_week_start = Date.commercial(@selected_year, @selected_week, 1)
     @current_week_end = Date.commercial(@selected_year, @selected_week, 7)
     
-    # Get all incomplete todo items for the selected week
-    @todo_items = current_user.todo_items.incomplete
+    # Get all todo items for the selected week (both completed and incomplete)
+    @todo_items = current_user.todo_items
                            .where(week_start_date: @current_week_start)
+                           .includes(:notes, :source)
                            .order(:created_at)
-    
-    # For debugging - also get all todo items for this week (including completed)
-    @all_todo_items_this_week = current_user.todo_items
-                                        .where(week_start_date: @current_week_start)
-                                        .order(:created_at)
     
     # Check if todos have been generated for this week
     @todos_generated = @todo_items.exists?
@@ -58,6 +54,32 @@ class DashboardController < ApplicationController
     
     redirect_to weekly_dashboard_path(year: @selected_year, week: @selected_week), 
                 notice: "#{todos_deleted} to-do items cleared for Week #{@selected_week} of #{@selected_year}."
+  end
+
+  def weekly_report
+    @selected_year = params[:year]&.to_i || Date.current.year
+    @selected_week = params[:week]&.to_i || Date.current.cweek
+    
+    # Calculate the start and end of the selected week
+    @current_week_start = Date.commercial(@selected_year, @selected_week, 1)
+    @current_week_end = Date.commercial(@selected_year, @selected_week, 7)
+    
+    # Get all todo items for the selected week (both completed and incomplete)
+    @all_todo_items = current_user.todo_items
+                              .where(week_start_date: @current_week_start)
+                              .includes(:notes)
+                              .order(:created_at)
+    
+    # Group items by type and completion status (only completed items for report)
+    @completed_items = @all_todo_items.completed
+    @incomplete_items = [] # Empty array - we don't want incomplete items in the report
+    
+    # Group by source type for better organization (only completed items)
+    @meeting_items = @all_todo_items.completed.where(source_type: 'RecurringMeeting')
+    @goal_items = @all_todo_items.completed.where(source_type: 'Goal')
+    @ad_hoc_items = @all_todo_items.completed.where(source_type: 'AdHocTodo')
+    
+    render layout: false
   end
 
   private

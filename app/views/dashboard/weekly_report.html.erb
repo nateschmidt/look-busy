@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Weekly Report - Week <%= @selected_week %> of <%= @selected_year %></title>
+  <style>
+    body { font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; margin: 20px; }
+    .section { margin-bottom: 30px; }
+    .section-title { font-weight: bold; font-size: 16px; margin-bottom: 10px; border-bottom: 1px solid #ccc; }
+    .item { margin-bottom: 15px; padding-left: 20px; }
+    .item-title { font-weight: bold; }
+    .item-description { margin: 5px 0; }
+    .item-notes { margin: 5px 0; padding-left: 20px; font-style: italic; color: #666; }
+    .completed { text-decoration: line-through; color: #888; }
+    .incomplete { color: #d00; }
+    .stats { background: #f5f5f5; padding: 10px; margin-bottom: 20px; border-left: 4px solid #007bff; }
+    .copy-button { position: fixed; top: 20px; right: 20px; padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    .copy-button:hover { background: #0056b3; }
+  </style>
+</head>
+<body>
+  <button class="copy-button" onclick="copyToClipboard()">Copy to Clipboard</button>
+  
+  <div id="report-content">
+    <h1>Weekly Progress Report - Week <%= @selected_week %> of <%= @selected_year %></h1>
+    <p><strong>Date Range:</strong> <%= @current_week_start.strftime("%B %d, %Y") %> to <%= @current_week_end.strftime("%B %d, %Y") %></p>
+    
+    <div class="stats">
+      <strong>Summary Statistics:</strong><br>
+      • Completed Items: <%= @completed_items.count %><br>
+      <% if @completed_items.count > 0 %>
+        • Items with Notes: <%= @completed_items.joins(:notes).count %>
+      <% end %>
+    </div>
+
+    <div class="section">
+      <div class="section-title">COMPLETED ITEMS</div>
+      <% if @completed_items.any? %>
+        <% @completed_items.each do |item| %>
+          <div class="item">
+            <div class="item-title">✓ <%= item.description %></div>
+            <div class="item-description">
+              <strong>Type:</strong> 
+              <% case item.source_type %>
+                <% when 'RecurringMeeting' %>
+                  Recurring Meeting
+                <% when 'Goal' %>
+                  Weekly Goal
+                <% when 'AdHocTodo' %>
+                  Ad Hoc Task
+              <% end %>
+            </div>
+            <% if item.notes.any? %>
+              <div class="item-notes">
+                <strong>Notes:</strong><br>
+                <% item.notes.each do |note| %>
+                  • <%= note.content %><br>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="item">No items completed this week.</div>
+      <% end %>
+    </div>
+
+    <div class="section">
+      <div class="section-title">BREAKDOWN BY CATEGORY</div>
+      
+      <div class="item">
+        <div class="item-title">Recurring Meetings</div>
+        <div class="item-description">
+          <% if @meeting_items.any? %>
+            <% @meeting_items.each do |item| %>
+              • ✓ <%= item.description %><br>
+            <% end %>
+          <% else %>
+            No meeting items this week.
+          <% end %>
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="item-title">Weekly Goals</div>
+        <div class="item-description">
+          <% if @goal_items.any? %>
+            <% @goal_items.each do |item| %>
+              • ✓ <%= item.description %><br>
+            <% end %>
+          <% else %>
+            No goal items this week.
+          <% end %>
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="item-title">Ad Hoc Tasks</div>
+        <div class="item-description">
+          <% if @ad_hoc_items.any? %>
+            <% @ad_hoc_items.each do |item| %>
+              • ✓ <%= item.description %><br>
+            <% end %>
+          <% else %>
+            No ad hoc tasks this week.
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">NOTES AND REFLECTIONS</div>
+      <% notes_count = @all_todo_items.joins(:notes).count %>
+      <% if notes_count > 0 %>
+        <div class="item">
+          <div class="item-description">
+            <% @all_todo_items.includes(:notes).each do |item| %>
+              <% if item.notes.any? %>
+                <strong><%= item.description %>:</strong><br>
+                <% item.notes.each do |note| %>
+                  • <%= note.content %><br>
+                <% end %>
+                <br>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      <% else %>
+        <div class="item">No notes or reflections recorded this week.</div>
+      <% end %>
+    </div>
+  </div>
+
+  <script>
+    function copyToClipboard() {
+      const content = document.getElementById('report-content').innerText;
+      navigator.clipboard.writeText(content).then(function() {
+        const button = document.querySelector('.copy-button');
+        const originalText = button.textContent;
+        button.textContent = 'Copied!';
+        button.style.background = '#28a745';
+        setTimeout(function() {
+          button.textContent = originalText;
+          button.style.background = '#007bff';
+        }, 2000);
+      }).catch(function(err) {
+        console.error('Could not copy text: ', err);
+        alert('Failed to copy to clipboard. Please select and copy the text manually.');
+      });
+    }
+  </script>
+</body>
+</html>

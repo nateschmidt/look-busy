@@ -1,6 +1,6 @@
 class TodoItemsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_todo_item, only: [:update]
+  before_action :set_todo_item, only: [:update, :notes]
 
   def create
     @todo_item = current_user.todo_items.build(todo_item_params)
@@ -18,6 +18,10 @@ class TodoItemsController < ApplicationController
     else
       redirect_to weekly_dashboard_path, alert: 'Failed to update to-do item.'
     end
+  end
+
+  def notes
+    render json: { notes: @todo_item.notes }
   end
 
   private

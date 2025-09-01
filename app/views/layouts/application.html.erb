@@ -115,41 +115,68 @@
       });
 
       function setupTodoInteractions() {
+        console.log('Setting up todo interactions...');
         const todoCheckboxes = document.querySelectorAll('.todo-checkbox');
+        console.log('Found', todoCheckboxes.length, 'checkboxes');
 
         todoCheckboxes.forEach(function(checkbox) {
           checkbox.addEventListener('change', function() {
+            console.log('Checkbox changed:', this.checked);
             const card = this.closest('.todo-card');
             const cardTitle = card.querySelector('.card-title');
             const todoId = this.dataset.todoId;
+            console.log('Todo ID:', todoId);
 
             if (this.checked) {
-              // Show the note modal for all todo items
-              document.getElementById('note_notable_type').value = 'TodoItem';
-              document.getElementById('note_notable_id').value = todoId;
+              // Always show the note modal for all todo items
+              const notableTypeField = document.getElementById('note_notable_type');
+              const notableIdField = document.getElementById('note_notable_id');
               
-              // Show the modal
-              const modal = new bootstrap.Modal(document.getElementById('noteModal'));
-              modal.show();
+              if (notableTypeField && notableIdField) {
+                notableTypeField.value = 'TodoItem';
+                notableIdField.value = todoId;
+                
+                // Show the modal
+                const modalElement = document.getElementById('noteModal');
+                if (modalElement) {
+                  const modal = new bootstrap.Modal(modalElement);
+                  modal.show();
+                  console.log('Modal should be showing');
+                } else {
+                  console.error('Modal element not found');
+                }
+              } else {
+                console.error('Modal form fields not found');
+              }
               
               // Uncheck the checkbox until the note is submitted
               this.checked = false;
             } else {
+              // Handle unchecking - this shouldn't happen for completed tasks
+              // but we'll handle it gracefully
               card.classList.remove('completed');
-              cardTitle.style.textDecoration = 'none';
+              cardTitle.classList.remove('text-decoration-line-through', 'text-muted');
             }
           });
         });
 
         // Make entire card clickable
         const todoCards = document.querySelectorAll('.todo-card');
+        console.log('Found', todoCards.length, 'todo cards');
         todoCards.forEach(function(card) {
           card.addEventListener('click', function(e) {
+            console.log('Card clicked, target:', e.target.type);
             // Don't trigger if clicking on the checkbox itself
             if (e.target.type !== 'checkbox') {
               const checkbox = this.querySelector('input[type="checkbox"]');
-              checkbox.checked = !checkbox.checked;
-              checkbox.dispatchEvent(new Event('change'));
+              // Don't allow toggling if the task is already completed
+              if (!checkbox.checked) {
+                console.log('Toggling checkbox');
+                checkbox.checked = !checkbox.checked;
+                checkbox.dispatchEvent(new Event('change'));
+              } else {
+                console.log('Task already completed, not allowing toggle');
+              }
             }
           });
         });
@@ -162,8 +189,190 @@
             // The note will be created and the todo will be marked as completed
           });
         }
+
+        // Handle modal cleanup when dismissed
+        const noteModal = document.getElementById('noteModal');
+        if (noteModal) {
+          noteModal.addEventListener('hidden.bs.modal', function() {
+            cleanupModal();
+            
+            // Reset form
+            const form = document.getElementById('noteForm');
+            if (form) {
+              form.reset();
+              form.action = '/notes';
+              form.method = 'POST';
+            }
+            
+            // Reset modal title
+            const modalTitle = document.getElementById('noteModalLabel');
+            if (modalTitle) {
+              modalTitle.innerHTML = '<i class="bi bi-journal-text me-2"></i>Add Completion Notes (Optional)';
+            }
+            
+            // Reset submit button
+            const submitButton = document.querySelector('#noteModal input[type="submit"]');
+            if (submitButton) {
+              submitButton.value = 'Complete Task';
+            }
+          });
+          
+          // Handle clicking outside modal or pressing escape
+          noteModal.addEventListener('click', function(e) {
+            if (e.target === noteModal) {
+              const modal = bootstrap.Modal.getInstance(noteModal);
+              if (modal) {
+                modal.hide();
+              }
+            }
+          });
+        }
       }
-    </script>
+
+        // Test modal functionality
+        const modalElement = document.getElementById('noteModal');
+        if (modalElement) {
+          console.log('Modal element found');
+          // Test if Bootstrap is available
+          if (typeof bootstrap !== 'undefined') {
+            console.log('Bootstrap is available');
+          } else {
+            console.error('Bootstrap is not available');
+          }
+        } else {
+          console.error('Modal element not found');
+        }
+
+        // Handle view/edit notes buttons for completed tasks
+        document.addEventListener('click', function(e) {
+          if (e.target.closest('.view-notes-btn')) {
+            e.preventDefault();
+            const button = e.target.closest('.view-notes-btn');
+            const todoId = button.dataset.todoId;
+            const notes = button.dataset.notes;
+            
+            console.log('View notes clicked for todo:', todoId, 'notes:', notes);
+            showNotesModal(todoId, notes, true);
+          } else if (e.target.closest('.add-notes-btn')) {
+            e.preventDefault();
+            const button = e.target.closest('.add-notes-btn');
+            const todoId = button.dataset.todoId;
+            
+            console.log('Add notes clicked for todo:', todoId);
+            showNotesModal(todoId, '', false);
+          }
+        });
+
+        // Global cleanup for stuck modals (emergency fix)
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape') {
+            cleanupModal();
+          }
+        });
+
+        function showNotesModal(todoId, notes, isEditing) {
+          console.log('showNotesModal called with:', { todoId, notes, isEditing });
+          
+          const modalElement = document.getElementById('noteModal');
+          const modalTitle = document.getElementById('noteModalLabel');
+          const noteContent = document.querySelector('#noteModal textarea[name="note[content]"]');
+          const submitButton = document.querySelector('#noteModal input[type="submit"]');
+          const notableTypeField = document.getElementById('note_notable_type');
+          const notableIdField = document.getElementById('note_notable_id');
+          const noteIdField = document.getElementById('note_id');
+          
+          console.log('Modal elements found:', {
+            modalElement: !!modalElement,
+            modalTitle: !!modalTitle,
+            noteContent: !!noteContent,
+            submitButton: !!submitButton,
+            notableTypeField: !!notableTypeField,
+            notableIdField: !!notableIdField,
+            noteIdField: !!noteIdField
+          });
+          
+          // Clean up any existing modal state first
+          cleanupModal();
+          
+          if (modalElement && modalTitle && noteContent && submitButton) {
+            // Set modal title
+            modalTitle.innerHTML = isEditing ? 
+              '<i class="bi bi-journal-text me-2"></i>Edit Notes' : 
+              '<i class="bi bi-journal-text me-2"></i>Add Notes';
+            
+            // Set form action and method
+            const form = document.getElementById('noteForm');
+            if (isEditing && notes) {
+              // For editing, we need to find the existing note
+              fetch(`/todo_items/${todoId}/notes`)
+                .then(response => response.json())
+                .then(data => {
+                  console.log('Fetched notes data:', data);
+                  if (data.notes && data.notes.length > 0) {
+                    const note = data.notes[0];
+                    form.action = `/notes/${note.id}`;
+                    form.method = 'PATCH';
+                    noteContent.value = note.content;
+                    notableTypeField.value = 'TodoItem';
+                    notableIdField.value = todoId;
+                    noteIdField.value = note.id;
+                  }
+                })
+                .catch(error => {
+                  console.error('Error fetching notes:', error);
+                  // Fallback to adding new note
+                  form.action = '/notes';
+                  form.method = 'POST';
+                  noteContent.value = notes;
+                  notableTypeField.value = 'TodoItem';
+                  notableIdField.value = todoId;
+                });
+            } else {
+              // For adding new note
+              form.action = '/notes';
+              form.method = 'POST';
+              noteContent.value = '';
+              notableTypeField.value = 'TodoItem';
+              notableIdField.value = todoId;
+            }
+            
+            // Update button text
+            submitButton.value = isEditing ? 'Update Notes' : 'Add Notes';
+            
+            // Show the modal
+            console.log('About to show modal...');
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+            console.log('Modal show() called');
+          } else {
+            console.error('Required modal elements not found');
+          }
+        }
+
+        function cleanupModal() {
+          // Remove any existing modal backdrops
+          const backdrops = document.querySelectorAll('.modal-backdrop');
+          backdrops.forEach(backdrop => backdrop.remove());
+          
+          // Remove modal-open class from body
+          document.body.classList.remove('modal-open');
+          document.body.style.overflow = '';
+          document.body.style.paddingRight = '';
+        }
+
+        function testModal() {
+          console.log('Test modal function called');
+          const modalElement = document.getElementById('noteModal');
+          if (modalElement) {
+            console.log('Modal element found, showing...');
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+            console.log('Test modal show() called');
+          } else {
+            console.error('Modal element not found in test');
+          }
+        }
+      </script>
   </head>
 
   <body class="<%= @body_class %> d-flex flex-column min-vh-100">

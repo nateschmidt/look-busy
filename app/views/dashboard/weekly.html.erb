@@ -1,13 +1,26 @@
 <div class="container py-4">
-  <!-- Page Title -->
-  <div class="mb-4">
-    <h1 class="h2 mb-0">
-      <i class="bi bi-list-check me-2"></i>Week <%= @selected_week %> To-Do List
-    </h1>
-    <p class="text-muted mb-0">
-      <%= @current_week_start.strftime("%B %d") %> - <%= @current_week_end.strftime("%B %d, %Y") %>
-    </p>
-  </div>
+           <!-- Page Title -->
+         <div class="mb-4">
+           <div class="d-flex justify-content-between align-items-start">
+             <div>
+               <h1 class="h2 mb-0">
+                 <i class="bi bi-list-check me-2"></i>Week <%= @selected_week %> To-Do List
+               </h1>
+               <p class="text-muted mb-0">
+                 <%= @current_week_start.strftime("%B %d") %> - <%= @current_week_end.strftime("%B %d, %Y") %>
+               </p>
+             </div>
+             <% if @todo_items.any? %>
+               <%= link_to weekly_report_path(year: @selected_year, week: @selected_week), 
+                   class: "btn btn-outline-primary",
+                   target: "_blank" do %>
+                 <i class="bi bi-file-earmark-text me-1"></i>Generate Report
+               <% end %>
+             <% end %>
+             
+
+           </div>
+         </div>
 
   <!-- Week Selection and Quick Add Row -->
   <div class="row mb-4">
@@ -94,16 +107,16 @@
 
   <% if @todo_items.any? %>
     <div class="card shadow">
-      <div class="card-header bg-primary text-white">
-        <h3 class="h5 mb-0">
-          Your To-Do Items (<%= @todo_items.count %>)
-        </h3>
-      </div>
+              <div class="card-header bg-primary text-white">
+          <h3 class="h5 mb-0">
+            Your To-Do Items (<%= @todo_items.incomplete.count %> incomplete, <%= @todo_items.completed.count %> completed)
+          </h3>
+        </div>
       <div class="card-body">
         <div class="row">
           <% @todo_items.each_with_index do |todo_item, index| %>
             <div class="col-md-6 col-lg-4 mb-3">
-              <div class="card h-100 border-2 todo-card" id="todo-card-<%= index %>">
+              <div class="card h-100 border-2 todo-card <%= 'completed' if todo_item.completed? %>" id="todo-card-<%= index %>">
                 <div class="card-body p-3">
                   <div class="d-flex align-items-start mb-2">
                     <div class="form-check me-2">
@@ -111,6 +124,7 @@
                              type="checkbox" 
                              id="todo-<%= index %>" 
                              data-todo-id="<%= todo_item.id %>"
+                             <%= 'checked' if todo_item.completed? %>
                              style="transform: scale(1.1);">
                       <label class="form-check-label" for="todo-<%= index %>"></label>
                     </div>
@@ -129,9 +143,26 @@
                         <% end %>
                       </div>
                       
-                      <h6 class="card-title mb-1 small">
+                      <h6 class="card-title mb-1 small <%= 'text-decoration-line-through text-muted' if todo_item.completed? %>">
                         <%= todo_item.description %>
                       </h6>
+                      
+                      <% if todo_item.completed? && todo_item.notes.any? %>
+                        <div class="mt-2">
+                          <button class="btn btn-sm btn-outline-secondary view-notes-btn" 
+                                  data-todo-id="<%= todo_item.id %>"
+                                  data-notes="<%= todo_item.notes.map(&:content).join(' | ') %>">
+                            <i class="bi bi-journal-text me-1"></i>View Notes
+                          </button>
+                        </div>
+                      <% elsif todo_item.completed? %>
+                        <div class="mt-2">
+                          <button class="btn btn-sm btn-outline-secondary add-notes-btn" 
+                                  data-todo-id="<%= todo_item.id %>">
+                            <i class="bi bi-plus-circle me-1"></i>Add Notes
+                          </button>
+                        </div>
+                      <% end %>
                       
                       <% if todo_item.source_type == 'RecurringMeeting' %>
                         <small class="text-muted">
@@ -192,28 +223,28 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="noteModalLabel">
-          <i class="bi bi-journal-text me-2"></i>Add Completion Notes
+          <i class="bi bi-journal-text me-2"></i>Add Completion Notes (Optional)
         </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <%= form_with model: Note.new, local: true, id: "noteForm" do |form| %>
         <div class="modal-body">
-          <p class="text-muted mb-3">Add some details about how this task went or what you accomplished:</p>
+          <p class="text-muted mb-3">Add some details about how this task went or what you accomplished (optional):</p>
           
           <%= form.hidden_field :notable_type, id: "note_notable_type" %>
           <%= form.hidden_field :notable_id, id: "note_notable_id" %>
+          <%= form.hidden_field :id, id: "note_id" %>
           
           <div class="mb-3">
             <%= form.text_area :content, 
                 class: "form-control", 
                 rows: 4,
-                placeholder: "Describe what you accomplished, any challenges you faced, or notes for next time...",
-                required: true %>
+                placeholder: "Describe what you accomplished, any challenges you faced, or notes for next time... (optional)" %>
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <%= form.submit "Complete & Save Notes", class: "btn btn-success" %>
+          <%= form.submit "Complete Task", class: "btn btn-success" %>
         </div>
       <% end %>
     </div>
