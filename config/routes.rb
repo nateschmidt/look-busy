@@ -13,7 +13,11 @@ Rails.application.routes.draw do
   resources :recurring_meetings
   
   # Goals
-  resources :goals
+  resources :goals do
+    member do
+      patch :toggle_active
+    end
+  end
   
   # Ad hoc todos
   resources :ad_hoc_todos, only: [:create, :destroy]

@@ -1,45 +1,236 @@
 <div class="container py-4">
-  <div class="row justify-content-center">
-    <div class="col-md-8 col-lg-6">
-      <div class="card shadow">
-        <div class="card-header bg-primary text-white">
-          <div class="d-flex justify-content-between align-items-center">
-            <h2 class="h4 mb-0">
-              <i class="bi bi-target me-2"></i>Goal Details
-            </h2>
-            <div>
-              <%= link_to edit_goal_path(@goal), class: "btn btn-light btn-sm" do %>
-                <i class="bi bi-pencil me-1"></i>Edit
-              <% end %>
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><%= link_to "Goals", goals_path %></li>
+          <li class="breadcrumb-item active" aria-current="page"><%= @goal.description %></li>
+        </ol>
+      </nav>
+      <h1 class="h2 mb-0">
+        <i class="bi bi-target me-2"></i><%= @goal.description %>
+      </h1>
+      <p class="text-muted mb-0">Target: <%= @goal.target_count %> per week</p>
+    </div>
+    <div class="d-flex gap-2">
+      <%= link_to edit_goal_path(@goal), class: "btn btn-outline-primary" do %>
+        <i class="bi bi-pencil me-1"></i>Edit
+      <% end %>
+      <%= link_to goals_path, class: "btn btn-outline-secondary" do %>
+        <i class="bi bi-arrow-left me-1"></i>Back
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Status Badge -->
+  <div class="mb-4">
+    <% if @goal.active? %>
+      <span class="badge bg-success fs-6">
+        <i class="bi bi-toggle-on me-1"></i>Active
+      </span>
+    <% else %>
+      <span class="badge bg-secondary fs-6">
+        <i class="bi bi-toggle-off me-1"></i>Inactive
+      </span>
+    <% end %>
+  </div>
+
+  <!-- Key Metrics Cards -->
+  <div class="row mb-4">
+    <div class="col-md-3 mb-3">
+      <div class="card text-center h-100">
+        <div class="card-body">
+          <h3 class="card-title text-primary mb-1"><%= @stats[:total_completions] %></h3>
+          <p class="card-text text-muted mb-0">Total Completions</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card text-center h-100">
+        <div class="card-body">
+          <h3 class="card-title text-success mb-1"><%= @stats[:average_per_week] %></h3>
+          <p class="card-text text-muted mb-0">Avg per Week</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card text-center h-100">
+        <div class="card-body">
+          <h3 class="card-title text-info mb-1"><%= @stats[:target_met_percentage] %>%</h3>
+          <p class="card-text text-muted mb-0">Target Met</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card text-center h-100">
+        <div class="card-body">
+          <h3 class="card-title text-warning mb-1"><%= @stats[:current_streak] %></h3>
+          <p class="card-text text-muted mb-0">Current Streak</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Progress Chart -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">
+            <i class="bi bi-graph-up me-2"></i>Progress Over Time
+          </h5>
+        </div>
+        <div class="card-body">
+          <% if @chart_data.any? %>
+            <canvas id="progressChart" width="400" height="200"></canvas>
+          <% else %>
+            <div class="text-center py-4">
+              <i class="bi bi-graph-up display-4 text-muted mb-3"></i>
+              <h5 class="text-muted">No data yet</h5>
+              <p class="text-muted">Complete some to-do items to see your progress chart.</p>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detailed Statistics -->
+  <div class="row mb-4">
+    <div class="col-md-6 mb-3">
+      <div class="card h-100">
+        <div class="card-header">
+          <h5 class="card-title mb-0">
+            <i class="bi bi-trophy me-2"></i>Achievements
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-6">
+              <div class="text-center">
+                <h4 class="text-success mb-1"><%= @stats[:longest_streak] %></h4>
+                <small class="text-muted">Longest Streak</small>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="text-center">
+                <h4 class="text-primary mb-1"><%= @stats[:target_met_weeks] %></h4>
+                <small class="text-muted">Weeks Target Met</small>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-6">
+              <div class="text-center">
+                <h4 class="text-info mb-1"><%= @stats[:weeks_tracked] %></h4>
+                <small class="text-muted">Weeks Tracked</small>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="text-center">
+                <h4 class="text-warning mb-1"><%= @goal.best_week&.completed_count || 0 %></h4>
+                <small class="text-muted">Best Week</small>
+              </div>
             </div>
           </div>
         </div>
-        <div class="card-body p-4">
+      </div>
+    </div>
+    
+    <div class="col-md-6 mb-3">
+      <div class="card h-100">
+        <div class="card-header">
+          <h5 class="card-title mb-0">
+            <i class="bi bi-calendar-week me-2"></i>Recent Activity
+          </h5>
+        </div>
+        <div class="card-body">
+          <% if @recent_completions.any? %>
+            <div class="list-group list-group-flush">
+              <% @recent_completions.reverse.each do |completion| %>
+                <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                  <div>
+                    <strong>Week <%= completion.week_number %></strong>
+                    <br>
+                    <small class="text-muted"><%= completion.week_start_date.strftime("%B %d, %Y") %></small>
+                  </div>
+                  <div class="text-end">
+                    <span class="badge <%= completion.target_met? ? 'bg-success' : 'bg-secondary' %> fs-6">
+                      <%= completion.completed_count %> / <%= @goal.target_count %>
+                    </span>
+                    <% if completion.over_performance? %>
+                      <br><small class="text-success">+<%= completion.completed_count - @goal.target_count %></small>
+                    <% elsif completion.under_performance? %>
+                      <br><small class="text-danger">-<%= @goal.target_count - completion.completed_count %></small>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          <% else %>
+            <div class="text-center py-4">
+              <i class="bi bi-calendar-x display-4 text-muted mb-3"></i>
+              <h6 class="text-muted">No recent activity</h6>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Performance Analysis -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">
+            <i class="bi bi-bar-chart me-2"></i>Performance Analysis
+          </h5>
+        </div>
+        <div class="card-body">
           <div class="row">
-            <div class="col-md-6 mb-3">
-              <h5 class="text-muted mb-2">
-                <i class="bi bi-target me-1"></i>Goal Description
-              </h5>
-              <p class="h6"><%= @goal.description %></p>
+            <div class="col-md-4 mb-3">
+              <div class="text-center">
+                <div class="progress mb-2" style="height: 20px;">
+                  <div class="progress-bar <%= @stats[:target_met_percentage] >= 80 ? 'bg-success' : @stats[:target_met_percentage] >= 60 ? 'bg-warning' : 'bg-danger' %>" 
+                       role="progressbar" 
+                       style="width: <%= [@stats[:target_met_percentage], 100].min %>%"
+                       aria-valuenow="<%= @stats[:target_met_percentage] %>" 
+                       aria-valuemin="0" 
+                       aria-valuemax="100">
+                    <%= @stats[:target_met_percentage] %>%
+                  </div>
+                </div>
+                <small class="text-muted">Target Achievement Rate</small>
+              </div>
             </div>
-            
-            <div class="col-md-6 mb-3">
-              <h5 class="text-muted mb-2">
-                <i class="bi bi-number me-1"></i>Weekly Target
-              </h5>
-              <span class="badge bg-success fs-6"><%= @goal.target_count %></span>
+            <div class="col-md-4 mb-3">
+              <div class="text-center">
+                <h5 class="mb-1">
+                  <% if @stats[:average_per_week] >= @goal.target_count %>
+                    <span class="text-success">Above Target</span>
+                  <% elsif @stats[:average_per_week] >= @goal.target_count * 0.8 %>
+                    <span class="text-warning">Near Target</span>
+                  <% else %>
+                    <span class="text-danger">Below Target</span>
+                  <% end %>
+                </h5>
+                <small class="text-muted">Average Performance</small>
+              </div>
             </div>
-          </div>
-          
-          <div class="mt-4 pt-3 border-top">
-            <div class="d-flex gap-2">
-              <%= link_to goals_path, class: "btn btn-outline-primary" do %>
-                <i class="bi bi-arrow-left me-1"></i>Back to Goals
-              <% end %>
-              
-              <%= link_to @goal, method: :delete, data: { confirm: 'Are you sure you want to delete this goal?' }, class: "btn btn-outline-danger" do %>
-                <i class="bi bi-trash me-1"></i>Delete Goal
-              <% end %>
+            <div class="col-md-4 mb-3">
+              <div class="text-center">
+                <h5 class="mb-1">
+                  <% if @stats[:current_streak] > 0 %>
+                    <span class="text-success">On Fire!</span>
+                  <% else %>
+                    <span class="text-secondary">No Streak</span>
+                  <% end %>
+                </h5>
+                <small class="text-muted">Current Status</small>
+              </div>
             </div>
           </div>
         </div>
@@ -47,3 +238,63 @@
     </div>
   </div>
 </div>
+
+<% if @chart_data.any? %>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const ctx = document.getElementById('progressChart').getContext('2d');
+      const chartData = <%= raw @chart_data.to_json %>;
+      
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: chartData.map(d => d.week),
+          datasets: [{
+            label: 'Completed',
+            data: chartData.map(d => d.completed),
+            borderColor: 'rgb(75, 192, 192)',
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            tension: 0.1,
+            fill: true
+          }, {
+            label: 'Target',
+            data: chartData.map(d => d.target),
+            borderColor: 'rgb(255, 99, 132)',
+            backgroundColor: 'rgba(255, 99, 132, 0.1)',
+            borderDash: [5, 5],
+            fill: false
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            title: {
+              display: true,
+              text: 'Weekly Progress vs Target'
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Completions'
+              }
+            },
+            x: {
+              title: {
+                display: true,
+                text: 'Week'
+              }
+            }
+          }
+        }
+      });
+    });
+  </script>
+<% end %>

@@ -18,12 +18,22 @@
     <div class="form-text">Describe what you want to accomplish each week.</div>
   </div>
 
-  <div class="mb-4">
+  <div class="mb-3">
     <%= form.label :target_count, class: "form-label" do %>
       <i class="bi bi-number me-1"></i>Target Count (per week)
     <% end %>
     <%= form.number_field :target_count, class: "form-control", min: 1, placeholder: "e.g., 10" %>
     <div class="form-text">How many times do you want to do this per week?</div>
+  </div>
+
+  <div class="mb-4">
+    <div class="form-check">
+      <%= form.check_box :active, class: "form-check-input" %>
+      <%= form.label :active, class: "form-check-label" do %>
+        <i class="bi bi-toggle-on me-1"></i>Active Goal
+      <% end %>
+      <div class="form-text">Inactive goals won't generate to-do items when you run "Generate To-dos".</div>
+    </div>
   </div>
 
   <div class="d-flex gap-2">

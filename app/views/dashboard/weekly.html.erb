@@ -169,9 +169,34 @@
                           <i class="bi bi-clock me-1"></i><%= todo_item.source.frequency_display %>
                         </small>
                       <% elsif todo_item.source_type == 'Goal' %>
-                        <small class="text-muted">
-                          <i class="bi bi-target me-1"></i>Weekly goal
-                        </small>
+                        <div class="d-flex justify-content-between align-items-center">
+                          <small class="text-muted">
+                            <i class="bi bi-target me-1"></i>Weekly goal
+                          </small>
+                          <% 
+                            goal = todo_item.source
+                            completion = goal.completion_for_week(@current_week_start)
+                            completed_count = current_user.todo_items.where(source: goal, week_start_date: @current_week_start, completed: true).count
+                            progress_percentage = goal.target_count > 0 ? (completed_count.to_f / goal.target_count * 100).round(0) : 0
+                          %>
+                          <div class="d-flex align-items-center">
+                            <small class="text-muted me-2">
+                              <%= completed_count %>/<%= goal.target_count %>
+                            </small>
+                            <div class="progress me-2" style="width: 60px; height: 8px;">
+                              <div class="progress-bar <%= progress_percentage >= 100 ? 'bg-success' : progress_percentage >= 80 ? 'bg-warning' : 'bg-secondary' %>" 
+                                   role="progressbar" 
+                                   style="width: <%= [progress_percentage, 100].min %>%"
+                                   aria-valuenow="<%= progress_percentage %>" 
+                                   aria-valuemin="0" 
+                                   aria-valuemax="100">
+                              </div>
+                            </div>
+                            <%= link_to goal_path(goal), class: "btn btn-sm btn-outline-primary", title: "View goal details" do %>
+                              <i class="bi bi-graph-up"></i>
+                            <% end %>
+                          </div>
+                        </div>
                       <% elsif todo_item.source_type == 'AdHocTodo' %>
                         <div class="d-flex justify-content-between align-items-center">
                           <small class="text-muted">

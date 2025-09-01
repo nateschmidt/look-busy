@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_09_01_192543) do
+ActiveRecord::Schema[7.1].define(version: 2025_09_01_204013) do
   create_table "ad_hoc_todos", force: :cascade do |t|
     t.text "description", null: false
     t.integer "user_id", null: false
@@ -20,12 +20,24 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_01_192543) do
     t.index ["user_id"], name: "index_ad_hoc_todos_on_user_id"
   end
 
+  create_table "goal_completions", force: :cascade do |t|
+    t.integer "goal_id", null: false
+    t.date "week_start_date"
+    t.integer "completed_count"
+    t.integer "week_number"
+    t.integer "year"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["goal_id"], name: "index_goal_completions_on_goal_id"
+  end
+
   create_table "goals", force: :cascade do |t|
     t.string "description", null: false
     t.integer "target_count", default: 1, null: false
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "active"
     t.index ["user_id", "description"], name: "index_goals_on_user_id_and_description", unique: true
     t.index ["user_id"], name: "index_goals_on_user_id"
   end
@@ -80,6 +92,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_01_192543) do
   end
 
   add_foreign_key "ad_hoc_todos", "users"
+  add_foreign_key "goal_completions", "goals"
   add_foreign_key "goals", "users"
   add_foreign_key "notes", "users"
   add_foreign_key "recurring_meetings", "users"

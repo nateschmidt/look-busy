@@ -9,36 +9,161 @@
   </div>
 
   <% if @goals.any? %>
-    <div class="row">
-      <% @goals.each do |goal| %>
-        <div class="col-md-6 col-lg-4 mb-4">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-start mb-2">
-                <h5 class="card-title mb-0"><%= goal.description %></h5>
-                <span class="badge bg-success fs-6"><%= goal.target_count %></span>
+    <% active_goals = @goals.select(&:active?) %>
+    <% inactive_goals = @goals.reject(&:active?) %>
+    
+    <!-- Active Goals Section -->
+    <% if active_goals.any? %>
+      <div class="mb-4">
+        <h3 class="h4 text-success mb-3">
+          <i class="bi bi-toggle-on me-2"></i>Active Goals
+        </h3>
+        <div class="row">
+          <% active_goals.each do |goal| %>
+            <div class="col-md-6 col-lg-4 mb-4">
+              <div class="card h-100 shadow-sm border-success">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="card-title mb-0"><%= goal.description %></h5>
+                    <div class="d-flex align-items-center gap-2">
+                      <span class="badge bg-success fs-6">Active</span>
+                      <span class="badge bg-primary fs-6"><%= goal.target_count %></span>
+                    </div>
+                  </div>
+                  <p class="card-text text-muted mb-3">
+                    <i class="bi bi-target me-1"></i>Target: <%= goal.target_count %> per week
+                  </p>
+                  
+                  <!-- Progress Summary -->
+                  <% if goal.goal_completions.any? %>
+                    <div class="mb-3">
+                      <div class="d-flex justify-content-between align-items-center mb-1">
+                        <small class="text-muted">Progress</small>
+                        <small class="text-muted"><%= goal.total_completions %> total</small>
+                      </div>
+                      <div class="progress" style="height: 6px;">
+                        <div class="progress-bar <%= goal.target_met_percentage >= 80 ? 'bg-success' : goal.target_met_percentage >= 60 ? 'bg-warning' : 'bg-secondary' %>" 
+                             role="progressbar" 
+                             style="width: <%= [goal.target_met_percentage, 100].min %>%"
+                             aria-valuenow="<%= goal.target_met_percentage %>" 
+                             aria-valuemin="0" 
+                             aria-valuemax="100">
+                        </div>
+                      </div>
+                      <small class="text-muted">
+                        <%= goal.target_met_percentage %>% target met • <%= goal.average_completions_per_week %> avg/week
+                      </small>
+                    </div>
+                  <% end %>
+                  
+                  <div class="d-flex align-items-center mb-2">
+                    <i class="bi bi-toggle-on text-success me-1"></i>
+                    <small class="text-success">Will generate to-do items</small>
+                  </div>
+                </div>
+                <div class="card-footer bg-transparent border-top-0">
+                  <div class="d-flex gap-1 mb-2">
+                    <%= form_with url: toggle_active_goal_path(goal), method: :patch, local: true, class: "d-inline" do |form| %>
+                      <%= form.submit "Deactivate", class: "btn btn-sm btn-outline-warning" %>
+                    <% end %>
+                  </div>
+                  <div class="btn-group w-100" role="group">
+                    <%= link_to goal_path(goal), class: "btn btn-outline-primary btn-sm" do %>
+                      <i class="bi bi-eye me-1"></i>View
+                    <% end %>
+                    <%= link_to edit_goal_path(goal), class: "btn btn-outline-secondary btn-sm" do %>
+                      <i class="bi bi-pencil me-1"></i>Edit
+                    <% end %>
+                    <%= link_to goal_path(goal), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-outline-danger btn-sm" do %>
+                      <i class="bi bi-trash me-1"></i>Delete
+                    <% end %>
+                  </div>
+                </div>
               </div>
-              <p class="card-text text-muted mb-3">
-                <i class="bi bi-target me-1"></i>Target: <%= goal.target_count %> per week
-              </p>
             </div>
-            <div class="card-footer bg-transparent border-top-0">
-              <div class="btn-group w-100" role="group">
-                <%= link_to goal_path(goal), class: "btn btn-outline-primary btn-sm" do %>
-                  <i class="bi bi-eye me-1"></i>View
-                <% end %>
-                <%= link_to edit_goal_path(goal), class: "btn btn-outline-secondary btn-sm" do %>
-                  <i class="bi bi-pencil me-1"></i>Edit
-                <% end %>
-                <%= link_to goal_path(goal), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-outline-danger btn-sm" do %>
-                  <i class="bi bi-trash me-1"></i>Delete
-                <% end %>
-              </div>
-            </div>
-          </div>
+          <% end %>
         </div>
-      <% end %>
-    </div>
+      </div>
+    <% end %>
+    
+    <!-- Horizontal Divider -->
+    <% if active_goals.any? && inactive_goals.any? %>
+      <hr class="my-5">
+    <% end %>
+    
+    <!-- Inactive Goals Section -->
+    <% if inactive_goals.any? %>
+      <div class="mb-4">
+        <h3 class="h4 text-muted mb-3">
+          <i class="bi bi-toggle-off me-2"></i>Inactive Goals
+        </h3>
+        <div class="row">
+          <% inactive_goals.each do |goal| %>
+            <div class="col-md-6 col-lg-4 mb-4">
+              <div class="card h-100 shadow-sm border-secondary opacity-75">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="card-title mb-0 text-muted"><%= goal.description %></h5>
+                    <div class="d-flex align-items-center gap-2">
+                      <span class="badge bg-secondary fs-6">Inactive</span>
+                      <span class="badge bg-primary fs-6"><%= goal.target_count %></span>
+                    </div>
+                  </div>
+                  <p class="card-text text-muted mb-3">
+                    <i class="bi bi-target me-1"></i>Target: <%= goal.target_count %> per week
+                  </p>
+                  
+                  <!-- Progress Summary -->
+                  <% if goal.goal_completions.any? %>
+                    <div class="mb-3">
+                      <div class="d-flex justify-content-between align-items-center mb-1">
+                        <small class="text-muted">Progress</small>
+                        <small class="text-muted"><%= goal.total_completions %> total</small>
+                      </div>
+                      <div class="progress" style="height: 6px;">
+                        <div class="progress-bar <%= goal.target_met_percentage >= 80 ? 'bg-success' : goal.target_met_percentage >= 60 ? 'bg-warning' : 'bg-secondary' %>" 
+                             role="progressbar" 
+                             style="width: <%= [goal.target_met_percentage, 100].min %>%"
+                             aria-valuenow="<%= goal.target_met_percentage %>" 
+                             aria-valuemin="0" 
+                             aria-valuemax="100">
+                        </div>
+                      </div>
+                      <small class="text-muted">
+                        <%= goal.target_met_percentage %>% target met • <%= goal.average_completions_per_week %> avg/week
+                      </small>
+                    </div>
+                  <% end %>
+                  
+                  <div class="d-flex align-items-center mb-2">
+                    <i class="bi bi-toggle-off text-muted me-1"></i>
+                    <small class="text-muted">Won't generate to-do items</small>
+                  </div>
+                </div>
+                <div class="card-footer bg-transparent border-top-0">
+                  <div class="d-flex gap-1 mb-2">
+                    <%= form_with url: toggle_active_goal_path(goal), method: :patch, local: true, class: "d-inline" do |form| %>
+                      <%= form.submit "Activate", class: "btn btn-sm btn-outline-success" %>
+                    <% end %>
+                  </div>
+                  <div class="btn-group w-100" role="group">
+                    <%= link_to goal_path(goal), class: "btn btn-outline-primary btn-sm" do %>
+                      <i class="bi bi-eye me-1"></i>View
+                    <% end %>
+                    <%= link_to edit_goal_path(goal), class: "btn btn-outline-secondary btn-sm" do %>
+                      <i class="bi bi-pencil me-1"></i>Edit
+                    <% end %>
+                    <%= link_to goal_path(goal), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-outline-danger btn-sm" do %>
+                      <i class="bi bi-trash me-1"></i>Delete
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
   <% else %>
     <div class="text-center py-5">
       <i class="bi bi-target display-1 text-muted mb-3"></i>

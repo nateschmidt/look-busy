@@ -109,8 +109,8 @@ class DashboardController < ApplicationController
       end
     end
 
-    # Generate goal todos for the selected week
-    current_user.goals.each do |goal|
+    # Generate goal todos for the selected week (only active goals)
+    current_user.goals.active.each do |goal|
       # Check how many todo items we already have for this goal this week
       existing_count = current_user.todo_items.where(
         source_type: 'Goal',

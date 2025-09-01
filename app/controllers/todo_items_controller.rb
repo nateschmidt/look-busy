@@ -6,17 +6,22 @@ class TodoItemsController < ApplicationController
     @todo_item = current_user.todo_items.build(todo_item_params)
     
     if @todo_item.save
-      redirect_to weekly_dashboard_path, notice: 'To-do item created successfully!'
+      redirect_back(fallback_location: dashboard_weekly_path, notice: 'To-do item was successfully created.')
     else
-      redirect_to weekly_dashboard_path, alert: 'Failed to create to-do item.'
+      redirect_back(fallback_location: dashboard_weekly_path, alert: 'Failed to create to-do item.')
     end
   end
 
   def update
     if @todo_item.update(todo_item_params)
-      redirect_to weekly_dashboard_path, notice: 'To-do item updated successfully!'
+      # Track goal completion if this is a goal-related todo item
+      if @todo_item.source_type == 'Goal' && @todo_item.completed?
+        track_goal_completion(@todo_item.source, @todo_item.week_start_date)
+      end
+      
+      redirect_back(fallback_location: dashboard_weekly_path, notice: 'To-do item was successfully updated.')
     else
-      redirect_to weekly_dashboard_path, alert: 'Failed to update to-do item.'
+      redirect_back(fallback_location: dashboard_weekly_path, alert: 'Failed to update to-do item.')
     end
   end
 
@@ -31,6 +36,17 @@ class TodoItemsController < ApplicationController
   end
 
   def todo_item_params
-    params.require(:todo_item).permit(:description, :source_type, :source_id, :completed)
+    params.require(:todo_item).permit(:description, :completed, :week_start_date)
+  end
+  
+  def track_goal_completion(goal, week_start_date)
+    completion = goal.completion_for_week(week_start_date)
+    
+    # Count completed todo items for this goal in this week
+    completed_count = current_user.todo_items
+                                 .where(source: goal, week_start_date: week_start_date, completed: true)
+                                 .count
+    
+    completion.update(completed_count: completed_count)
   end
 end
