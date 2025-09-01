@@ -22,8 +22,10 @@ class NotesController < ApplicationController
   end
 
   def update
+    @note = current_user.notes.find(params[:id])
+    
     if @note.update(note_params)
-      redirect_to weekly_dashboard_path, notice: 'Note updated successfully!'
+      redirect_to weekly_dashboard_path
     else
       redirect_to weekly_dashboard_path, alert: 'Failed to update note.'
     end

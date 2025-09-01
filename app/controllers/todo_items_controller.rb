@@ -6,7 +6,7 @@ class TodoItemsController < ApplicationController
     @todo_item = current_user.todo_items.build(todo_item_params)
     
     if @todo_item.save
-      redirect_back(fallback_location: dashboard_weekly_path, notice: 'To-do item was successfully created.')
+      redirect_back(fallback_location: dashboard_weekly_path)
     else
       redirect_back(fallback_location: dashboard_weekly_path, alert: 'Failed to create to-do item.')
     end
@@ -19,7 +19,7 @@ class TodoItemsController < ApplicationController
         track_goal_completion(@todo_item.source, @todo_item.week_start_date)
       end
       
-      redirect_back(fallback_location: dashboard_weekly_path, notice: 'To-do item was successfully updated.')
+      redirect_back(fallback_location: dashboard_weekly_path)
     else
       redirect_back(fallback_location: dashboard_weekly_path, alert: 'Failed to update to-do item.')
     end

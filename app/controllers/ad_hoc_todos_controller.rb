@@ -9,20 +9,19 @@ class AdHocTodosController < ApplicationController
       # Create a todo item for this ad hoc todo
       current_user.todo_items.create!(
         description: @ad_hoc_todo.description,
-        source_type: 'AdHocTodo',
-        source_id: @ad_hoc_todo.id,
-        week_start_date: Date.current.beginning_of_week
+        source: @ad_hoc_todo,
+        week_start_date: Date.current.beginning_of_week(:monday)
       )
       
-      redirect_to weekly_dashboard_path, notice: 'To-do item added successfully!'
+      redirect_to weekly_dashboard_path
     else
-      redirect_to weekly_dashboard_path, alert: 'Failed to add to-do item.'
+      redirect_to weekly_dashboard_path, alert: 'Failed to create to-do item.'
     end
   end
 
   def destroy
     @ad_hoc_todo.destroy
-    redirect_to weekly_dashboard_path, notice: 'To-do item removed successfully!'
+    redirect_to weekly_dashboard_path
   end
 
   private

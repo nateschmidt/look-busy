@@ -1,4 +1,5 @@
 class RecurringMeetingsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_recurring_meeting, only: [:show, :edit, :update, :destroy]
 
   def index
@@ -12,22 +13,22 @@ class RecurringMeetingsController < ApplicationController
     @recurring_meeting = current_user.recurring_meetings.build
   end
 
+  def edit
+  end
+
   def create
     @recurring_meeting = current_user.recurring_meetings.build(recurring_meeting_params)
-    
+
     if @recurring_meeting.save
-      redirect_to @recurring_meeting, notice: 'Recurring meeting was successfully created.'
+      redirect_to @recurring_meeting
     else
       render :new, status: :unprocessable_entity
     end
   end
 
-  def edit
-  end
-
   def update
     if @recurring_meeting.update(recurring_meeting_params)
-      redirect_to @recurring_meeting, notice: 'Recurring meeting was successfully updated.'
+      redirect_to @recurring_meeting
     else
       render :edit, status: :unprocessable_entity
     end
@@ -35,7 +36,7 @@ class RecurringMeetingsController < ApplicationController
 
   def destroy
     @recurring_meeting.destroy
-    redirect_to recurring_meetings_url, notice: 'Recurring meeting was successfully deleted.'
+    redirect_to recurring_meetings_url
   end
 
   private
@@ -45,6 +46,6 @@ class RecurringMeetingsController < ApplicationController
   end
 
   def recurring_meeting_params
-    params.require(:recurring_meeting).permit(:name, :person, :frequency, :week_of_month, :month_of_quarter, :biweekly_pattern)
+    params.require(:recurring_meeting).permit(:name, :frequency, :week_of_month, :month_of_quarter, :biweekly_pattern)
   end
 end

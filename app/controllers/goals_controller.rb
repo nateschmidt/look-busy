@@ -43,7 +43,7 @@ class GoalsController < ApplicationController
     @goal = current_user.goals.build(goal_params)
 
     if @goal.save
-      redirect_to @goal, notice: 'Goal was successfully created.'
+      redirect_to @goal
     else
       render :new, status: :unprocessable_entity
     end
@@ -51,7 +51,7 @@ class GoalsController < ApplicationController
 
   def update
     if @goal.update(goal_params)
-      redirect_to @goal, notice: 'Goal was successfully updated.'
+      redirect_to @goal
     else
       render :edit, status: :unprocessable_entity
     end
@@ -59,15 +59,14 @@ class GoalsController < ApplicationController
 
   def destroy
     @goal.destroy
-    redirect_to goals_url, notice: 'Goal was successfully deleted.'
+    redirect_to goals_url
   end
 
   def toggle_active
     Rails.logger.info "Toggling goal #{@goal.id} from #{@goal.active} to #{!@goal.active}"
     
     if @goal.update(active: !@goal.active)
-      status = @goal.active? ? 'activated' : 'deactivated'
-      redirect_to goals_url, notice: "Goal was successfully #{status}."
+      redirect_to goals_url
     else
       redirect_to goals_url, alert: "Failed to update goal status."
     end
