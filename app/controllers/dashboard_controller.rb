@@ -12,11 +12,11 @@ class DashboardController < ApplicationController
     @current_week_start = Date.commercial(@selected_year, @selected_week, 1)
     @current_week_end = Date.commercial(@selected_year, @selected_week, 7)
     
-    # Get all todo items for the selected week
+    # Get all todo items for the selected week, ordered by completion status then creation date
     @todo_items = current_user.todo_items
                               .where(week_start_date: @current_week_start)
                               .includes(:notes)
-                              .order(:created_at)
+                              .order(:completed, :created_at)
     
     # Check if todos have been generated for this week
     @todos_generated = @todo_items.any?
