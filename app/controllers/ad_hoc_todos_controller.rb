@@ -5,10 +5,16 @@ class AdHocTodosController < ApplicationController
   def create
     @ad_hoc_todo = current_user.ad_hoc_todos.build(ad_hoc_todo_params)
     
+    # Check if description ends with " m" to mark as meeting
+    is_meeting = @ad_hoc_todo.description.end_with?(" m")
+    
     if @ad_hoc_todo.save
       # Create a todo item for this ad hoc todo
+      # If it's marked as a meeting, remove the " m" suffix from the description
+      description = is_meeting ? @ad_hoc_todo.description.chomp(" m") : @ad_hoc_todo.description
+      
       current_user.todo_items.create!(
-        description: @ad_hoc_todo.description,
+        description: description,
         source: @ad_hoc_todo,
         week_start_date: Date.current.beginning_of_week(:monday)
       )

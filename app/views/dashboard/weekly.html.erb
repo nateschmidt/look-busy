@@ -93,7 +93,7 @@
             <div class="mb-3">
               <%= form.text_field :description, 
                   class: "form-control", 
-                  placeholder: "Enter a new to-do item...",
+                  placeholder: "Enter a new to-do item... (add ' m' for meeting)",
                   required: true %>
             </div>
             <div class="text-center">
@@ -138,8 +138,13 @@
                           <i class="bi bi-target text-success me-1"></i>
                           <span class="badge bg-success badge-sm me-1">Goal</span>
                         <% elsif todo_item.source_type == 'AdHocTodo' %>
-                          <i class="bi bi-list-task text-warning me-1"></i>
-                          <span class="badge bg-warning badge-sm me-1">Ad Hoc</span>
+                          <% if todo_item.source.description.end_with?(" m") %>
+                            <i class="bi bi-calendar-event text-primary me-1"></i>
+                            <span class="badge bg-primary badge-sm me-1">Meeting</span>
+                          <% else %>
+                            <i class="bi bi-list-task text-warning me-1"></i>
+                            <span class="badge bg-warning badge-sm me-1">Ad Hoc</span>
+                          <% end %>
                         <% end %>
                       </div>
                       
@@ -181,16 +186,10 @@
                           <% end %>
                         </div>
                       <% elsif todo_item.source_type == 'AdHocTodo' %>
-                        <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
                           <small class="text-muted">
                             <i class="bi bi-list-task me-1"></i>Quick add
                           </small>
-                          <%= link_to ad_hoc_todo_path(todo_item.source), 
-                              method: :delete, 
-                              class: "btn btn-sm btn-outline-danger",
-                              data: { confirm: "Remove this to-do item?" } do %>
-                            <i class="bi bi-trash"></i>
-                          <% end %>
                         </div>
                       <% end %>
                     </div>
@@ -213,6 +212,18 @@
                       </button>
                     <% end %>
                   </div>
+                  
+                  <!-- Delete icon in upper right for AdHocTodo items -->
+                  <% if todo_item.source_type == 'AdHocTodo' %>
+                    <div style="position: absolute; top: 8px; right: 8px;">
+                      <%= link_to ad_hoc_todo_path(todo_item.source), 
+                          data: { turbo_method: :delete, turbo_confirm: "Remove this to-do item?" },
+                          class: "btn btn-sm btn-outline-danger p-1",
+                          style: "font-size: 0.7rem; line-height: 1;" do %>
+                        <i class="bi bi-trash"></i>
+                      <% end %>
+                    </div>
+                  <% end %>
                 </div>
               </div>
             </div>
