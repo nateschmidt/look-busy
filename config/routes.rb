@@ -26,7 +26,7 @@ Rails.application.routes.draw do
            resources :notes, only: [:create, :update]
   
   # Todo items
-           resources :todo_items, only: [:create, :update] do
+           resources :todo_items, only: [:create, :update, :destroy] do
            member do
              get :notes
            end

@@ -237,17 +237,15 @@
                     <% end %>
                   </div>
                   
-                  <!-- Delete icon in upper right for AdHocTodo items -->
-                  <% if todo_item.source_type == 'AdHocTodo' %>
-                    <div style="position: absolute; top: 8px; right: 8px;">
-                      <%= link_to ad_hoc_todo_path(todo_item.source), 
-                          data: { turbo_method: :delete, turbo_confirm: "Remove this to-do item?" },
-                          class: "btn btn-sm btn-outline-danger p-1",
-                          style: "font-size: 0.7rem; line-height: 1;" do %>
-                        <i class="bi bi-trash"></i>
-                      <% end %>
-                    </div>
-                  <% end %>
+                  <!-- Delete icon in upper right for all todo items -->
+                  <div style="position: absolute; top: 8px; right: 8px;">
+                    <%= link_to todo_item_path(todo_item), 
+                        data: { turbo_method: :delete, turbo_confirm: "Remove this to-do item?" },
+                        class: "btn btn-sm btn-outline-danger p-1",
+                        style: "font-size: 0.7rem; line-height: 1;" do %>
+                      <i class="bi bi-trash"></i>
+                    <% end %>
+                  </div>
                 </div>
               </div>
             </div>

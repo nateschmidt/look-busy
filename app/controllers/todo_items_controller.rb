@@ -1,14 +1,14 @@
 class TodoItemsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_todo_item, only: [:update, :notes]
+  before_action :set_todo_item, only: [:update, :notes, :destroy]
 
   def create
     @todo_item = current_user.todo_items.build(todo_item_params)
     
     if @todo_item.save
-      redirect_back(fallback_location: dashboard_weekly_path)
+      redirect_back(fallback_location: weekly_dashboard_path)
     else
-      redirect_back(fallback_location: dashboard_weekly_path, alert: 'Failed to create to-do item.')
+      redirect_back(fallback_location: weekly_dashboard_path, alert: 'Failed to create to-do item.')
     end
   end
 
@@ -23,19 +23,24 @@ class TodoItemsController < ApplicationController
       if request.xhr?
         render json: { success: true, completed: @todo_item.completed? }
       else
-        redirect_back(fallback_location: dashboard_weekly_path)
+        redirect_back(fallback_location: weekly_dashboard_path)
       end
     else
       if request.xhr?
         render json: { success: false, errors: @todo_item.errors.full_messages }, status: :unprocessable_entity
       else
-        redirect_back(fallback_location: dashboard_weekly_path, alert: 'Failed to update to-do item.')
+        redirect_back(fallback_location: weekly_dashboard_path, alert: 'Failed to update to-do item.')
       end
     end
   end
 
   def notes
     render json: { notes: @todo_item.notes }
+  end
+
+  def destroy
+    @todo_item.destroy
+    redirect_back(fallback_location: weekly_dashboard_path)
   end
 
   private
