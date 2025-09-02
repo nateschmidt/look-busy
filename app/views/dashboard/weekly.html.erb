@@ -108,9 +108,38 @@
   <% if @todo_items.any? %>
     <div class="card shadow">
               <div class="card-header bg-primary text-white">
-          <h3 class="h5 mb-0">
-            Your To-Do Items (<%= @todo_items.incomplete.count %> incomplete, <%= @todo_items.completed.count %> completed)
-          </h3>
+          <div class="d-flex justify-content-between align-items-center">
+            <h3 class="h5 mb-0">
+              <% if params[:filter].present? && params[:filter] != 'all' %>
+                <%= params[:filter].titleize %> To-Do Items (<%= @todo_items.count %> total)
+              <% else %>
+                Your To-Do Items (<%= @todo_items.incomplete.count %> incomplete, <%= @todo_items.completed.count %> completed)
+              <% end %>
+            </h3>
+            
+            <!-- Filter Buttons -->
+            <div class="d-flex gap-1">
+              <%= link_to weekly_dashboard_path(year: @selected_year, week: @selected_week, filter: 'all'), 
+                  class: "btn btn-sm #{params[:filter].blank? || params[:filter] == 'all' ? 'btn-light' : 'btn-outline-light'}" do %>
+                <i class="bi bi-list-ul me-1"></i>All
+              <% end %>
+              
+              <%= link_to weekly_dashboard_path(year: @selected_year, week: @selected_week, filter: 'meetings'), 
+                  class: "btn btn-sm #{params[:filter] == 'meetings' ? 'btn-light' : 'btn-outline-light'}" do %>
+                Meetings
+              <% end %>
+              
+              <%= link_to weekly_dashboard_path(year: @selected_year, week: @selected_week, filter: 'goals'), 
+                  class: "btn btn-sm #{params[:filter] == 'goals' ? 'btn-light' : 'btn-outline-light'}" do %>
+                <i class="bi bi-target me-1"></i>Goals
+              <% end %>
+              
+              <%= link_to weekly_dashboard_path(year: @selected_year, week: @selected_week, filter: 'ad_hoc'), 
+                  class: "btn btn-sm #{params[:filter] == 'ad_hoc' ? 'btn-light' : 'btn-outline-light'}" do %>
+                Ad Hoc
+              <% end %>
+            </div>
+          </div>
         </div>
       <div class="card-body">
         <div class="row">
@@ -132,17 +161,14 @@
                     <div class="flex-grow-1">
                       <div class="d-flex align-items-center mb-1">
                         <% if todo_item.source_type == 'RecurringMeeting' %>
-                          <i class="bi bi-calendar-event text-primary me-1"></i>
                           <span class="badge bg-primary badge-sm me-1">Meeting</span>
                         <% elsif todo_item.source_type == 'Goal' %>
                           <i class="bi bi-target text-success me-1"></i>
                           <span class="badge bg-success badge-sm me-1">Goal</span>
                         <% elsif todo_item.source_type == 'AdHocTodo' %>
                           <% if todo_item.source.description.end_with?(" m") %>
-                            <i class="bi bi-calendar-event text-primary me-1"></i>
                             <span class="badge bg-primary badge-sm me-1">Meeting</span>
                           <% else %>
-                            <i class="bi bi-list-task text-warning me-1"></i>
                             <span class="badge bg-warning badge-sm me-1">Ad Hoc</span>
                           <% end %>
                         <% end %>

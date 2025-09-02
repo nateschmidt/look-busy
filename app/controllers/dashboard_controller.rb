@@ -18,6 +18,9 @@ class DashboardController < ApplicationController
                               .includes(:notes)
                               .order(:completed, :created_at)
     
+    # Apply filter if specified
+    @todo_items = apply_filter(@todo_items, params[:filter])
+    
     # Check if todos have been generated for this week
     @todos_generated = @todo_items.any?
   end
@@ -82,6 +85,32 @@ class DashboardController < ApplicationController
   end
 
   private
+
+  def apply_filter(todo_items, filter)
+    case filter
+    when 'meetings'
+      # Filter for meetings (RecurringMeeting and AdHocTodo with 'm' suffix)
+      meeting_items = todo_items.where(source_type: 'RecurringMeeting')
+      
+      # Add AdHocTodo items that end with ' m'
+      ad_hoc_meetings = todo_items.includes(:source)
+                                 .where(source_type: 'AdHocTodo')
+                                 .select { |item| item.source.description.end_with?(' m') }
+      
+      # Combine the two collections
+      meeting_items + ad_hoc_meetings
+    when 'goals'
+      todo_items.where(source_type: 'Goal')
+    when 'ad_hoc'
+      # Filter for ad-hoc items (AdHocTodo without 'm' suffix)
+      todo_items.includes(:source)
+                .where(source_type: 'AdHocTodo')
+                .select { |item| !item.source.description.end_with?(' m') }
+    else
+      # 'all' or no filter - return all items
+      todo_items
+    end
+  end
 
   def generate_weekly_todos_for_date(week_start_date)
     todos_created = 0
