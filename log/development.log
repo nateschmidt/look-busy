@@ -30577,3 +30577,375 @@ Processing by GoalsController#show as HTML
 Completed 200 OK in 31ms (Views: 4.0ms | ActiveRecord: 3.8ms | Allocations: 13143)
 
 
+Started GET "/" for ::1 at 2025-09-02 12:19:39 -0500
+Processing by PagesController#home as HTML
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  Rendering layout layouts/application.html.erb
+  Rendering pages/home.html.erb within layouts/application
+  Rendered pages/home.html.erb within layouts/application (Duration: 0.5ms | Allocations: 147)
+  Rendered layout layouts/application.html.erb (Duration: 12.2ms | Allocations: 27320)
+Completed 200 OK in 225ms (Views: 14.4ms | ActiveRecord: 5.0ms | Allocations: 37166)
+
+
+Started GET "/dashboard/weekly" for ::1 at 2025-09-02 12:19:41 -0500
+Processing by DashboardController#weekly as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mTodoItem Exists? (2.2ms)[0m  [1m[34mSELECT 1 AS one FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."week_start_date" = $2 LIMIT $3[0m  [["user_id", 1], ["week_start_date", "2025-09-01"], ["LIMIT", 1]]
+  ↳ app/controllers/dashboard_controller.rb:25:in `weekly'
+  Rendering layout layouts/application.html.erb
+  Rendering dashboard/weekly.html.erb within layouts/application
+  [1m[36mCACHE TodoItem Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."week_start_date" = $2 LIMIT $3[0m  [["user_id", 1], ["week_start_date", "2025-09-01"], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:13
+  [1m[36mCACHE TodoItem Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."week_start_date" = $2 LIMIT $3[0m  [["user_id", 1], ["week_start_date", "2025-09-01"], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:108
+  [1m[36mTodoItem Count (1.7ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."week_start_date" = $2 AND "todo_items"."completed" = $3[0m  [["user_id", 1], ["week_start_date", "2025-09-01"], ["completed", false]]
+  ↳ app/views/dashboard/weekly.html.erb:116
+  [1m[36mTodoItem Count (0.6ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."week_start_date" = $2 AND "todo_items"."completed" = $3[0m  [["user_id", 1], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:116
+  [1m[36mTodoItem Load (0.6ms)[0m  [1m[34mSELECT "todo_items".* FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."week_start_date" = $2 ORDER BY "todo_items"."completed" ASC, "todo_items"."created_at" ASC[0m  [["user_id", 1], ["week_start_date", "2025-09-01"]]
+  ↳ app/views/dashboard/weekly.html.erb:146:in `each_with_index'
+  [1m[36mNote Load (6.7ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."notable_type" = $1 AND "notes"."notable_id" IN ($2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25)[0m  [["notable_type", "TodoItem"], ["notable_id", 66], ["notable_id", 67], ["notable_id", 68], ["notable_id", 69], ["notable_id", 70], ["notable_id", 71], ["notable_id", 72], ["notable_id", 73], ["notable_id", 74], ["notable_id", 75], ["notable_id", 76], ["notable_id", 77], ["notable_id", 78], ["notable_id", 79], ["notable_id", 80], ["notable_id", 81], ["notable_id", 82], ["notable_id", 83], ["notable_id", 84], ["notable_id", 85], ["notable_id", 86], ["notable_id", 87], ["notable_id", 89], ["notable_id", 91]]
+  ↳ app/views/dashboard/weekly.html.erb:146:in `each_with_index'
+  [1m[36mRecurringMeeting Load (0.8ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:183
+  [1m[36mRecurringMeeting Load (0.4ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:183
+  [1m[36mRecurringMeeting Load (0.3ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:183
+  [1m[36mRecurringMeeting Load (0.3ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:183
+  [1m[36mRecurringMeeting Load (0.2ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."id" = $1 LIMIT $2[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:183
+  [1m[36mRecurringMeeting Load (8.6ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."id" = $1 LIMIT $2[0m  [["id", 6], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:183
+  [1m[36mRecurringMeeting Load (0.3ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."id" = $1 LIMIT $2[0m  [["id", 7], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:183
+  [1m[36mRecurringMeeting Load (1.6ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."id" = $1 LIMIT $2[0m  [["id", 12], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:183
+  [1m[36mRecurringMeeting Load (0.3ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."id" = $1 LIMIT $2[0m  [["id", 14], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:183
+  [1m[36mRecurringMeeting Load (2.1ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."id" = $1 LIMIT $2[0m  [["id", 15], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:183
+  [1m[36mRecurringMeeting Load (0.9ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."id" = $1 LIMIT $2[0m  [["id", 17], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:183
+  [1m[36mGoal Load (6.0ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:187
+  [1m[36mGoalCompletion Load (0.8ms)[0m  [1m[34mSELECT "goal_completions".* FROM "goal_completions" WHERE "goal_completions"."goal_id" = $1 AND "goal_completions"."week_number" = $2 AND "goal_completions"."year" = $3 LIMIT $4[0m  [["goal_id", 1], ["week_number", 36], ["year", 2025], ["LIMIT", 1]]
+  ↳ app/models/goal_completion.rb:17:in `find_or_create_for_goal_and_week'
+  [1m[36mTodoItem Count (0.8ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."source_type" = $2 AND "todo_items"."source_id" = $3 AND "todo_items"."week_start_date" = $4 AND "todo_items"."completed" = $5[0m  [["user_id", 1], ["source_type", "Goal"], ["source_id", 1], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:189
+  [1m[36mCACHE Goal Load (0.0ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:187
+  [1m[36mCACHE GoalCompletion Load (0.0ms)[0m  [1m[34mSELECT "goal_completions".* FROM "goal_completions" WHERE "goal_completions"."goal_id" = $1 AND "goal_completions"."week_number" = $2 AND "goal_completions"."year" = $3 LIMIT $4[0m  [["goal_id", 1], ["week_number", 36], ["year", 2025], ["LIMIT", 1]]
+  ↳ app/models/goal_completion.rb:17:in `find_or_create_for_goal_and_week'
+  [1m[36mCACHE TodoItem Count (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."source_type" = $2 AND "todo_items"."source_id" = $3 AND "todo_items"."week_start_date" = $4 AND "todo_items"."completed" = $5[0m  [["user_id", 1], ["source_type", "Goal"], ["source_id", 1], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:189
+  [1m[36mCACHE Goal Load (0.0ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:187
+  [1m[36mCACHE GoalCompletion Load (0.0ms)[0m  [1m[34mSELECT "goal_completions".* FROM "goal_completions" WHERE "goal_completions"."goal_id" = $1 AND "goal_completions"."week_number" = $2 AND "goal_completions"."year" = $3 LIMIT $4[0m  [["goal_id", 1], ["week_number", 36], ["year", 2025], ["LIMIT", 1]]
+  ↳ app/models/goal_completion.rb:17:in `find_or_create_for_goal_and_week'
+  [1m[36mCACHE TodoItem Count (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."source_type" = $2 AND "todo_items"."source_id" = $3 AND "todo_items"."week_start_date" = $4 AND "todo_items"."completed" = $5[0m  [["user_id", 1], ["source_type", "Goal"], ["source_id", 1], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:189
+  [1m[36mCACHE Goal Load (0.0ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:187
+  [1m[36mCACHE GoalCompletion Load (0.0ms)[0m  [1m[34mSELECT "goal_completions".* FROM "goal_completions" WHERE "goal_completions"."goal_id" = $1 AND "goal_completions"."week_number" = $2 AND "goal_completions"."year" = $3 LIMIT $4[0m  [["goal_id", 1], ["week_number", 36], ["year", 2025], ["LIMIT", 1]]
+  ↳ app/models/goal_completion.rb:17:in `find_or_create_for_goal_and_week'
+  [1m[36mCACHE TodoItem Count (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."source_type" = $2 AND "todo_items"."source_id" = $3 AND "todo_items"."week_start_date" = $4 AND "todo_items"."completed" = $5[0m  [["user_id", 1], ["source_type", "Goal"], ["source_id", 1], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:189
+  [1m[36mCACHE Goal Load (0.0ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:187
+  [1m[36mCACHE GoalCompletion Load (0.0ms)[0m  [1m[34mSELECT "goal_completions".* FROM "goal_completions" WHERE "goal_completions"."goal_id" = $1 AND "goal_completions"."week_number" = $2 AND "goal_completions"."year" = $3 LIMIT $4[0m  [["goal_id", 1], ["week_number", 36], ["year", 2025], ["LIMIT", 1]]
+  ↳ app/models/goal_completion.rb:17:in `find_or_create_for_goal_and_week'
+  [1m[36mCACHE TodoItem Count (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."source_type" = $2 AND "todo_items"."source_id" = $3 AND "todo_items"."week_start_date" = $4 AND "todo_items"."completed" = $5[0m  [["user_id", 1], ["source_type", "Goal"], ["source_id", 1], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:189
+  [1m[36mGoal Load (0.7ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:187
+  [1m[36mGoalCompletion Load (0.2ms)[0m  [1m[34mSELECT "goal_completions".* FROM "goal_completions" WHERE "goal_completions"."goal_id" = $1 AND "goal_completions"."week_number" = $2 AND "goal_completions"."year" = $3 LIMIT $4[0m  [["goal_id", 2], ["week_number", 36], ["year", 2025], ["LIMIT", 1]]
+  ↳ app/models/goal_completion.rb:17:in `find_or_create_for_goal_and_week'
+  [1m[36mTodoItem Count (1.4ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."source_type" = $2 AND "todo_items"."source_id" = $3 AND "todo_items"."week_start_date" = $4 AND "todo_items"."completed" = $5[0m  [["user_id", 1], ["source_type", "Goal"], ["source_id", 2], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:189
+  [1m[36mGoal Load (0.3ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:187
+  [1m[36mGoalCompletion Load (0.4ms)[0m  [1m[34mSELECT "goal_completions".* FROM "goal_completions" WHERE "goal_completions"."goal_id" = $1 AND "goal_completions"."week_number" = $2 AND "goal_completions"."year" = $3 LIMIT $4[0m  [["goal_id", 3], ["week_number", 36], ["year", 2025], ["LIMIT", 1]]
+  ↳ app/models/goal_completion.rb:17:in `find_or_create_for_goal_and_week'
+  [1m[36mTodoItem Count (1.8ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."source_type" = $2 AND "todo_items"."source_id" = $3 AND "todo_items"."week_start_date" = $4 AND "todo_items"."completed" = $5[0m  [["user_id", 1], ["source_type", "Goal"], ["source_id", 3], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:189
+  [1m[36mCACHE Goal Load (0.0ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:187
+  [1m[36mCACHE GoalCompletion Load (0.0ms)[0m  [1m[34mSELECT "goal_completions".* FROM "goal_completions" WHERE "goal_completions"."goal_id" = $1 AND "goal_completions"."week_number" = $2 AND "goal_completions"."year" = $3 LIMIT $4[0m  [["goal_id", 3], ["week_number", 36], ["year", 2025], ["LIMIT", 1]]
+  ↳ app/models/goal_completion.rb:17:in `find_or_create_for_goal_and_week'
+  [1m[36mCACHE TodoItem Count (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."source_type" = $2 AND "todo_items"."source_id" = $3 AND "todo_items"."week_start_date" = $4 AND "todo_items"."completed" = $5[0m  [["user_id", 1], ["source_type", "Goal"], ["source_id", 3], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:189
+  [1m[36mCACHE Goal Load (0.0ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+Started GET "/recurring_meetings" for ::1 at 2025-09-02 12:19:41 -0500
+  ↳ app/views/dashboard/weekly.html.erb:187
+  [1m[36mCACHE GoalCompletion Load (0.0ms)[0m  [1m[34mSELECT "goal_completions".* FROM "goal_completions" WHERE "goal_completions"."goal_id" = $1 AND "goal_completions"."week_number" = $2 AND "goal_completions"."year" = $3 LIMIT $4[0m  [["goal_id", 3], ["week_number", 36], ["year", 2025], ["LIMIT", 1]]
+  ↳ app/models/goal_completion.rb:17:in `find_or_create_for_goal_and_week'
+  [1m[36mCACHE TodoItem Count (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."source_type" = $2 AND "todo_items"."source_id" = $3 AND "todo_items"."week_start_date" = $4 AND "todo_items"."completed" = $5[0m  [["user_id", 1], ["source_type", "Goal"], ["source_id", 3], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:189
+  [1m[36mGoal Load (0.5ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:187
+  [1m[36mGoalCompletion Load (0.3ms)[0m  [1m[34mSELECT "goal_completions".* FROM "goal_completions" WHERE "goal_completions"."goal_id" = $1 AND "goal_completions"."week_number" = $2 AND "goal_completions"."year" = $3 LIMIT $4[0m  [["goal_id", 4], ["week_number", 36], ["year", 2025], ["LIMIT", 1]]
+  ↳ app/models/goal_completion.rb:17:in `find_or_create_for_goal_and_week'
+  [1m[36mTodoItem Count (1.6ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."source_type" = $2 AND "todo_items"."source_id" = $3 AND "todo_items"."week_start_date" = $4 AND "todo_items"."completed" = $5[0m  [["user_id", 1], ["source_type", "Goal"], ["source_id", 4], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:189
+  [1m[36mGoal Load (0.3ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:187
+  [1m[36mGoalCompletion Load (0.7ms)[0m  [1m[34mSELECT "goal_completions".* FROM "goal_completions" WHERE "goal_completions"."goal_id" = $1 AND "goal_completions"."week_number" = $2 AND "goal_completions"."year" = $3 LIMIT $4[0m  [["goal_id", 5], ["week_number", 36], ["year", 2025], ["LIMIT", 1]]
+Processing by RecurringMeetingsController#index as HTML
+  ↳ app/models/goal_completion.rb:17:in `find_or_create_for_goal_and_week'
+  [1m[36mTodoItem Count (1.5ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."source_type" = $2 AND "todo_items"."source_id" = $3 AND "todo_items"."week_start_date" = $4 AND "todo_items"."completed" = $5[0m  [["user_id", 1], ["source_type", "Goal"], ["source_id", 5], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:189
+  [1m[36mAdHocTodo Load (0.6ms)[0m  [1m[34mSELECT "ad_hoc_todos".* FROM "ad_hoc_todos" WHERE "ad_hoc_todos"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:150
+  [1m[36mAdHocTodo Load (0.5ms)[0m  [1m[34mSELECT "ad_hoc_todos".* FROM "ad_hoc_todos" WHERE "ad_hoc_todos"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:150
+  Rendered dashboard/weekly.html.erb within layouts/application (Duration: 176.9ms | Allocations: 67483)
+  Rendered layout layouts/application.html.erb (Duration: 177.8ms | Allocations: 68728)
+Completed 200 OK in 187ms (Views: 131.3ms | ActiveRecord: 49.4ms | Allocations: 73870)
+
+
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  Rendering layout layouts/application.html.erb
+  Rendering recurring_meetings/index.html.erb within layouts/application
+  [1m[36mRecurringMeeting Exists? (1.2ms)[0m  [1m[34mSELECT 1 AS one FROM "recurring_meetings" WHERE "recurring_meetings"."user_id" = $1 LIMIT $2[0m  [["user_id", 1], ["LIMIT", 1]]
+  ↳ app/views/recurring_meetings/index.html.erb:11
+  [1m[36mRecurringMeeting Load (1.5ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."user_id" = $1 ORDER BY "recurring_meetings"."name" ASC[0m  [["user_id", 1]]
+  ↳ app/views/recurring_meetings/index.html.erb:13
+  Rendered recurring_meetings/index.html.erb within layouts/application (Duration: 25.5ms | Allocations: 5335)
+  Rendered layout layouts/application.html.erb (Duration: 29.7ms | Allocations: 6582)
+Completed 200 OK in 354ms (Views: 30.7ms | ActiveRecord: 7.0ms | Allocations: 19729)
+
+
+Started GET "/dashboard/weekly" for ::1 at 2025-09-02 12:19:42 -0500
+Processing by DashboardController#weekly as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mTodoItem Exists? (1.4ms)[0m  [1m[34mSELECT 1 AS one FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."week_start_date" = $2 LIMIT $3[0m  [["user_id", 1], ["week_start_date", "2025-09-01"], ["LIMIT", 1]]
+  ↳ app/controllers/dashboard_controller.rb:25:in `weekly'
+  Rendering layout layouts/application.html.erb
+  Rendering dashboard/weekly.html.erb within layouts/application
+  [1m[36mCACHE TodoItem Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."week_start_date" = $2 LIMIT $3[0m  [["user_id", 1], ["week_start_date", "2025-09-01"], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:13
+  [1m[36mCACHE TodoItem Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."week_start_date" = $2 LIMIT $3[0m  [["user_id", 1], ["week_start_date", "2025-09-01"], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:108
+  [1m[36mTodoItem Count (1.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."week_start_date" = $2 AND "todo_items"."completed" = $3[0m  [["user_id", 1], ["week_start_date", "2025-09-01"], ["completed", false]]
+  ↳ app/views/dashboard/weekly.html.erb:116
+  [1m[36mTodoItem Count (5.5ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."week_start_date" = $2 AND "todo_items"."completed" = $3[0m  [["user_id", 1], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:116
+  [1m[36mTodoItem Load (0.6ms)[0m  [1m[34mSELECT "todo_items".* FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."week_start_date" = $2 ORDER BY "todo_items"."completed" ASC, "todo_items"."created_at" ASC[0m  [["user_id", 1], ["week_start_date", "2025-09-01"]]
+  ↳ app/views/dashboard/weekly.html.erb:146:in `each_with_index'
+  [1m[36mNote Load (2.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."notable_type" = $1 AND "notes"."notable_id" IN ($2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25)[0m  [["notable_type", "TodoItem"], ["notable_id", 66], ["notable_id", 67], ["notable_id", 68], ["notable_id", 69], ["notable_id", 70], ["notable_id", 71], ["notable_id", 72], ["notable_id", 73], ["notable_id", 74], ["notable_id", 75], ["notable_id", 76], ["notable_id", 77], ["notable_id", 78], ["notable_id", 79], ["notable_id", 80], ["notable_id", 81], ["notable_id", 82], ["notable_id", 83], ["notable_id", 84], ["notable_id", 85], ["notable_id", 86], ["notable_id", 87], ["notable_id", 89], ["notable_id", 91]]
+  ↳ app/views/dashboard/weekly.html.erb:146:in `each_with_index'
+  [1m[36mRecurringMeeting Load (0.3ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:183
+  [1m[36mRecurringMeeting Load (0.4ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:183
+  [1m[36mRecurringMeeting Load (0.4ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:183
+  [1m[36mRecurringMeeting Load (0.3ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:183
+  [1m[36mRecurringMeeting Load (0.6ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."id" = $1 LIMIT $2[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:183
+  [1m[36mRecurringMeeting Load (0.3ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."id" = $1 LIMIT $2[0m  [["id", 6], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:183
+  [1m[36mRecurringMeeting Load (0.2ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."id" = $1 LIMIT $2[0m  [["id", 7], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:183
+  [1m[36mRecurringMeeting Load (0.3ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."id" = $1 LIMIT $2[0m  [["id", 12], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:183
+  [1m[36mRecurringMeeting Load (0.2ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."id" = $1 LIMIT $2[0m  [["id", 14], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:183
+  [1m[36mRecurringMeeting Load (1.3ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."id" = $1 LIMIT $2[0m  [["id", 15], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:183
+  [1m[36mRecurringMeeting Load (0.1ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."id" = $1 LIMIT $2[0m  [["id", 17], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:183
+  [1m[36mGoal Load (0.5ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:187
+  [1m[36mGoalCompletion Load (0.4ms)[0m  [1m[34mSELECT "goal_completions".* FROM "goal_completions" WHERE "goal_completions"."goal_id" = $1 AND "goal_completions"."week_number" = $2 AND "goal_completions"."year" = $3 LIMIT $4[0m  [["goal_id", 1], ["week_number", 36], ["year", 2025], ["LIMIT", 1]]
+  ↳ app/models/goal_completion.rb:17:in `find_or_create_for_goal_and_week'
+  [1m[36mTodoItem Count (0.6ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."source_type" = $2 AND "todo_items"."source_id" = $3 AND "todo_items"."week_start_date" = $4 AND "todo_items"."completed" = $5[0m  [["user_id", 1], ["source_type", "Goal"], ["source_id", 1], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:189
+  [1m[36mCACHE Goal Load (0.0ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:187
+  [1m[36mCACHE GoalCompletion Load (0.0ms)[0m  [1m[34mSELECT "goal_completions".* FROM "goal_completions" WHERE "goal_completions"."goal_id" = $1 AND "goal_completions"."week_number" = $2 AND "goal_completions"."year" = $3 LIMIT $4[0m  [["goal_id", 1], ["week_number", 36], ["year", 2025], ["LIMIT", 1]]
+  ↳ app/models/goal_completion.rb:17:in `find_or_create_for_goal_and_week'
+  [1m[36mCACHE TodoItem Count (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."source_type" = $2 AND "todo_items"."source_id" = $3 AND "todo_items"."week_start_date" = $4 AND "todo_items"."completed" = $5[0m  [["user_id", 1], ["source_type", "Goal"], ["source_id", 1], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:189
+  [1m[36mCACHE Goal Load (0.0ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:187
+  [1m[36mCACHE GoalCompletion Load (0.0ms)[0m  [1m[34mSELECT "goal_completions".* FROM "goal_completions" WHERE "goal_completions"."goal_id" = $1 AND "goal_completions"."week_number" = $2 AND "goal_completions"."year" = $3 LIMIT $4[0m  [["goal_id", 1], ["week_number", 36], ["year", 2025], ["LIMIT", 1]]
+  ↳ app/models/goal_completion.rb:17:in `find_or_create_for_goal_and_week'
+  [1m[36mCACHE TodoItem Count (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."source_type" = $2 AND "todo_items"."source_id" = $3 AND "todo_items"."week_start_date" = $4 AND "todo_items"."completed" = $5[0m  [["user_id", 1], ["source_type", "Goal"], ["source_id", 1], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:189
+  [1m[36mCACHE Goal Load (0.0ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:187
+  [1m[36mCACHE GoalCompletion Load (0.0ms)[0m  [1m[34mSELECT "goal_completions".* FROM "goal_completions" WHERE "goal_completions"."goal_id" = $1 AND "goal_completions"."week_number" = $2 AND "goal_completions"."year" = $3 LIMIT $4[0m  [["goal_id", 1], ["week_number", 36], ["year", 2025], ["LIMIT", 1]]
+  ↳ app/models/goal_completion.rb:17:in `find_or_create_for_goal_and_week'
+  [1m[36mCACHE TodoItem Count (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."source_type" = $2 AND "todo_items"."source_id" = $3 AND "todo_items"."week_start_date" = $4 AND "todo_items"."completed" = $5[0m  [["user_id", 1], ["source_type", "Goal"], ["source_id", 1], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:189
+  [1m[36mCACHE Goal Load (0.0ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:187
+  [1m[36mCACHE GoalCompletion Load (0.0ms)[0m  [1m[34mSELECT "goal_completions".* FROM "goal_completions" WHERE "goal_completions"."goal_id" = $1 AND "goal_completions"."week_number" = $2 AND "goal_completions"."year" = $3 LIMIT $4[0m  [["goal_id", 1], ["week_number", 36], ["year", 2025], ["LIMIT", 1]]
+  ↳ app/models/goal_completion.rb:17:in `find_or_create_for_goal_and_week'
+  [1m[36mCACHE TodoItem Count (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."source_type" = $2 AND "todo_items"."source_id" = $3 AND "todo_items"."week_start_date" = $4 AND "todo_items"."completed" = $5[0m  [["user_id", 1], ["source_type", "Goal"], ["source_id", 1], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:189
+  [1m[36mGoal Load (0.7ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:187
+  [1m[36mGoalCompletion Load (0.7ms)[0m  [1m[34mSELECT "goal_completions".* FROM "goal_completions" WHERE "goal_completions"."goal_id" = $1 AND "goal_completions"."week_number" = $2 AND "goal_completions"."year" = $3 LIMIT $4[0m  [["goal_id", 2], ["week_number", 36], ["year", 2025], ["LIMIT", 1]]
+  ↳ app/models/goal_completion.rb:17:in `find_or_create_for_goal_and_week'
+  [1m[36mTodoItem Count (0.4ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."source_type" = $2 AND "todo_items"."source_id" = $3 AND "todo_items"."week_start_date" = $4 AND "todo_items"."completed" = $5[0m  [["user_id", 1], ["source_type", "Goal"], ["source_id", 2], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:189
+  [1m[36mGoal Load (0.5ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:187
+  [1m[36mGoalCompletion Load (0.3ms)[0m  [1m[34mSELECT "goal_completions".* FROM "goal_completions" WHERE "goal_completions"."goal_id" = $1 AND "goal_completions"."week_number" = $2 AND "goal_completions"."year" = $3 LIMIT $4[0m  [["goal_id", 3], ["week_number", 36], ["year", 2025], ["LIMIT", 1]]
+  ↳ app/models/goal_completion.rb:17:in `find_or_create_for_goal_and_week'
+  [1m[36mTodoItem Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."source_type" = $2 AND "todo_items"."source_id" = $3 AND "todo_items"."week_start_date" = $4 AND "todo_items"."completed" = $5[0m  [["user_id", 1], ["source_type", "Goal"], ["source_id", 3], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:189
+  [1m[36mCACHE Goal Load (0.0ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:187
+  [1m[36mCACHE GoalCompletion Load (0.0ms)[0m  [1m[34mSELECT "goal_completions".* FROM "goal_completions" WHERE "goal_completions"."goal_id" = $1 AND "goal_completions"."week_number" = $2 AND "goal_completions"."year" = $3 LIMIT $4[0m  [["goal_id", 3], ["week_number", 36], ["year", 2025], ["LIMIT", 1]]
+  ↳ app/models/goal_completion.rb:17:in `find_or_create_for_goal_and_week'
+  [1m[36mCACHE TodoItem Count (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."source_type" = $2 AND "todo_items"."source_id" = $3 AND "todo_items"."week_start_date" = $4 AND "todo_items"."completed" = $5[0m  [["user_id", 1], ["source_type", "Goal"], ["source_id", 3], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:189
+  [1m[36mCACHE Goal Load (0.0ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:187
+  [1m[36mCACHE GoalCompletion Load (0.0ms)[0m  [1m[34mSELECT "goal_completions".* FROM "goal_completions" WHERE "goal_completions"."goal_id" = $1 AND "goal_completions"."week_number" = $2 AND "goal_completions"."year" = $3 LIMIT $4[0m  [["goal_id", 3], ["week_number", 36], ["year", 2025], ["LIMIT", 1]]
+  ↳ app/models/goal_completion.rb:17:in `find_or_create_for_goal_and_week'
+  [1m[36mCACHE TodoItem Count (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."source_type" = $2 AND "todo_items"."source_id" = $3 AND "todo_items"."week_start_date" = $4 AND "todo_items"."completed" = $5[0m  [["user_id", 1], ["source_type", "Goal"], ["source_id", 3], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:189
+  [1m[36mGoal Load (1.2ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:187
+  [1m[36mGoalCompletion Load (0.4ms)[0m  [1m[34mSELECT "goal_completions".* FROM "goal_completions" WHERE "goal_completions"."goal_id" = $1 AND "goal_completions"."week_number" = $2 AND "goal_completions"."year" = $3 LIMIT $4[0m  [["goal_id", 4], ["week_number", 36], ["year", 2025], ["LIMIT", 1]]
+  ↳ app/models/goal_completion.rb:17:in `find_or_create_for_goal_and_week'
+  [1m[36mTodoItem Count (0.5ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."source_type" = $2 AND "todo_items"."source_id" = $3 AND "todo_items"."week_start_date" = $4 AND "todo_items"."completed" = $5[0m  [["user_id", 1], ["source_type", "Goal"], ["source_id", 4], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:189
+  [1m[36mGoal Load (0.5ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:187
+  [1m[36mGoalCompletion Load (0.3ms)[0m  [1m[34mSELECT "goal_completions".* FROM "goal_completions" WHERE "goal_completions"."goal_id" = $1 AND "goal_completions"."week_number" = $2 AND "goal_completions"."year" = $3 LIMIT $4[0m  [["goal_id", 5], ["week_number", 36], ["year", 2025], ["LIMIT", 1]]
+  ↳ app/models/goal_completion.rb:17:in `find_or_create_for_goal_and_week'
+  [1m[36mTodoItem Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."source_type" = $2 AND "todo_items"."source_id" = $3 AND "todo_items"."week_start_date" = $4 AND "todo_items"."completed" = $5[0m  [["user_id", 1], ["source_type", "Goal"], ["source_id", 5], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:189
+  [1m[36mAdHocTodo Load (0.4ms)[0m  [1m[34mSELECT "ad_hoc_todos".* FROM "ad_hoc_todos" WHERE "ad_hoc_todos"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:150
+  [1m[36mAdHocTodo Load (0.2ms)[0m  [1m[34mSELECT "ad_hoc_todos".* FROM "ad_hoc_todos" WHERE "ad_hoc_todos"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:150
+  Rendered dashboard/weekly.html.erb within layouts/application (Duration: 97.5ms | Allocations: 31641)
+  Rendered layout layouts/application.html.erb (Duration: 98.5ms | Allocations: 32884)
+Completed 200 OK in 118ms (Views: 78.5ms | ActiveRecord: 23.5ms | Allocations: 35206)
+
+
+Started GET "/dashboard/weekly" for ::1 at 2025-09-02 12:20:26 -0500
+Processing by DashboardController#weekly as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mTodoItem Exists? (0.5ms)[0m  [1m[34mSELECT 1 AS one FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."week_start_date" = $2 LIMIT $3[0m  [["user_id", 1], ["week_start_date", "2025-09-01"], ["LIMIT", 1]]
+  ↳ app/controllers/dashboard_controller.rb:25:in `weekly'
+  Rendering layout layouts/application.html.erb
+  Rendering dashboard/weekly.html.erb within layouts/application
+  [1m[36mCACHE TodoItem Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."week_start_date" = $2 LIMIT $3[0m  [["user_id", 1], ["week_start_date", "2025-09-01"], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:13
+  [1m[36mCACHE TodoItem Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."week_start_date" = $2 LIMIT $3[0m  [["user_id", 1], ["week_start_date", "2025-09-01"], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:108
+  [1m[36mTodoItem Count (1.7ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."week_start_date" = $2 AND "todo_items"."completed" = $3[0m  [["user_id", 1], ["week_start_date", "2025-09-01"], ["completed", false]]
+  ↳ app/views/dashboard/weekly.html.erb:116
+  [1m[36mTodoItem Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."week_start_date" = $2 AND "todo_items"."completed" = $3[0m  [["user_id", 1], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:116
+  [1m[36mTodoItem Load (0.4ms)[0m  [1m[34mSELECT "todo_items".* FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."week_start_date" = $2 ORDER BY "todo_items"."completed" ASC, "todo_items"."created_at" ASC[0m  [["user_id", 1], ["week_start_date", "2025-09-01"]]
+  ↳ app/views/dashboard/weekly.html.erb:146:in `each_with_index'
+  [1m[36mNote Load (1.9ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."notable_type" = $1 AND "notes"."notable_id" IN ($2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25)[0m  [["notable_type", "TodoItem"], ["notable_id", 66], ["notable_id", 67], ["notable_id", 68], ["notable_id", 69], ["notable_id", 70], ["notable_id", 71], ["notable_id", 72], ["notable_id", 73], ["notable_id", 74], ["notable_id", 75], ["notable_id", 76], ["notable_id", 77], ["notable_id", 78], ["notable_id", 79], ["notable_id", 80], ["notable_id", 81], ["notable_id", 82], ["notable_id", 83], ["notable_id", 84], ["notable_id", 85], ["notable_id", 86], ["notable_id", 87], ["notable_id", 89], ["notable_id", 91]]
+  ↳ app/views/dashboard/weekly.html.erb:146:in `each_with_index'
+  [1m[36mRecurringMeeting Load (0.4ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:183
+  [1m[36mRecurringMeeting Load (1.1ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:183
+  [1m[36mRecurringMeeting Load (0.2ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:183
+  [1m[36mRecurringMeeting Load (1.9ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:183
+  [1m[36mRecurringMeeting Load (0.4ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."id" = $1 LIMIT $2[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:183
+  [1m[36mRecurringMeeting Load (0.2ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."id" = $1 LIMIT $2[0m  [["id", 6], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:183
+  [1m[36mRecurringMeeting Load (0.1ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."id" = $1 LIMIT $2[0m  [["id", 7], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:183
+  [1m[36mRecurringMeeting Load (0.2ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."id" = $1 LIMIT $2[0m  [["id", 12], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:183
+  [1m[36mRecurringMeeting Load (0.1ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."id" = $1 LIMIT $2[0m  [["id", 14], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:183
+  [1m[36mRecurringMeeting Load (0.2ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."id" = $1 LIMIT $2[0m  [["id", 15], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:183
+  [1m[36mRecurringMeeting Load (4.2ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."id" = $1 LIMIT $2[0m  [["id", 17], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:183
+  [1m[36mGoal Load (0.3ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:187
+  [1m[36mGoalCompletion Load (0.6ms)[0m  [1m[34mSELECT "goal_completions".* FROM "goal_completions" WHERE "goal_completions"."goal_id" = $1 AND "goal_completions"."week_number" = $2 AND "goal_completions"."year" = $3 LIMIT $4[0m  [["goal_id", 1], ["week_number", 36], ["year", 2025], ["LIMIT", 1]]
+  ↳ app/models/goal_completion.rb:17:in `find_or_create_for_goal_and_week'
+  [1m[36mTodoItem Count (0.6ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."source_type" = $2 AND "todo_items"."source_id" = $3 AND "todo_items"."week_start_date" = $4 AND "todo_items"."completed" = $5[0m  [["user_id", 1], ["source_type", "Goal"], ["source_id", 1], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:189
+  [1m[36mCACHE Goal Load (0.0ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:187
+  [1m[36mCACHE GoalCompletion Load (0.0ms)[0m  [1m[34mSELECT "goal_completions".* FROM "goal_completions" WHERE "goal_completions"."goal_id" = $1 AND "goal_completions"."week_number" = $2 AND "goal_completions"."year" = $3 LIMIT $4[0m  [["goal_id", 1], ["week_number", 36], ["year", 2025], ["LIMIT", 1]]
+  ↳ app/models/goal_completion.rb:17:in `find_or_create_for_goal_and_week'
+  [1m[36mCACHE TodoItem Count (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."source_type" = $2 AND "todo_items"."source_id" = $3 AND "todo_items"."week_start_date" = $4 AND "todo_items"."completed" = $5[0m  [["user_id", 1], ["source_type", "Goal"], ["source_id", 1], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:189
+  [1m[36mCACHE Goal Load (0.0ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:187
+  [1m[36mCACHE GoalCompletion Load (0.0ms)[0m  [1m[34mSELECT "goal_completions".* FROM "goal_completions" WHERE "goal_completions"."goal_id" = $1 AND "goal_completions"."week_number" = $2 AND "goal_completions"."year" = $3 LIMIT $4[0m  [["goal_id", 1], ["week_number", 36], ["year", 2025], ["LIMIT", 1]]
+  ↳ app/models/goal_completion.rb:17:in `find_or_create_for_goal_and_week'
+  [1m[36mCACHE TodoItem Count (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."source_type" = $2 AND "todo_items"."source_id" = $3 AND "todo_items"."week_start_date" = $4 AND "todo_items"."completed" = $5[0m  [["user_id", 1], ["source_type", "Goal"], ["source_id", 1], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:189
+  [1m[36mCACHE Goal Load (0.0ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:187
+  [1m[36mCACHE GoalCompletion Load (0.0ms)[0m  [1m[34mSELECT "goal_completions".* FROM "goal_completions" WHERE "goal_completions"."goal_id" = $1 AND "goal_completions"."week_number" = $2 AND "goal_completions"."year" = $3 LIMIT $4[0m  [["goal_id", 1], ["week_number", 36], ["year", 2025], ["LIMIT", 1]]
+  ↳ app/models/goal_completion.rb:17:in `find_or_create_for_goal_and_week'
+  [1m[36mCACHE TodoItem Count (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."source_type" = $2 AND "todo_items"."source_id" = $3 AND "todo_items"."week_start_date" = $4 AND "todo_items"."completed" = $5[0m  [["user_id", 1], ["source_type", "Goal"], ["source_id", 1], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:189
+  [1m[36mCACHE Goal Load (0.0ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:187
+  [1m[36mCACHE GoalCompletion Load (0.0ms)[0m  [1m[34mSELECT "goal_completions".* FROM "goal_completions" WHERE "goal_completions"."goal_id" = $1 AND "goal_completions"."week_number" = $2 AND "goal_completions"."year" = $3 LIMIT $4[0m  [["goal_id", 1], ["week_number", 36], ["year", 2025], ["LIMIT", 1]]
+  ↳ app/models/goal_completion.rb:17:in `find_or_create_for_goal_and_week'
+  [1m[36mCACHE TodoItem Count (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."source_type" = $2 AND "todo_items"."source_id" = $3 AND "todo_items"."week_start_date" = $4 AND "todo_items"."completed" = $5[0m  [["user_id", 1], ["source_type", "Goal"], ["source_id", 1], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:189
+  [1m[36mGoal Load (0.7ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:187
+  [1m[36mGoalCompletion Load (3.5ms)[0m  [1m[34mSELECT "goal_completions".* FROM "goal_completions" WHERE "goal_completions"."goal_id" = $1 AND "goal_completions"."week_number" = $2 AND "goal_completions"."year" = $3 LIMIT $4[0m  [["goal_id", 2], ["week_number", 36], ["year", 2025], ["LIMIT", 1]]
+  ↳ app/models/goal_completion.rb:17:in `find_or_create_for_goal_and_week'
+  [1m[36mTodoItem Count (0.6ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."source_type" = $2 AND "todo_items"."source_id" = $3 AND "todo_items"."week_start_date" = $4 AND "todo_items"."completed" = $5[0m  [["user_id", 1], ["source_type", "Goal"], ["source_id", 2], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:189
+  [1m[36mGoal Load (0.2ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:187
+  [1m[36mGoalCompletion Load (0.2ms)[0m  [1m[34mSELECT "goal_completions".* FROM "goal_completions" WHERE "goal_completions"."goal_id" = $1 AND "goal_completions"."week_number" = $2 AND "goal_completions"."year" = $3 LIMIT $4[0m  [["goal_id", 3], ["week_number", 36], ["year", 2025], ["LIMIT", 1]]
+  ↳ app/models/goal_completion.rb:17:in `find_or_create_for_goal_and_week'
+  [1m[36mTodoItem Count (0.4ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."source_type" = $2 AND "todo_items"."source_id" = $3 AND "todo_items"."week_start_date" = $4 AND "todo_items"."completed" = $5[0m  [["user_id", 1], ["source_type", "Goal"], ["source_id", 3], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:189
+  [1m[36mCACHE Goal Load (0.0ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:187
+  [1m[36mCACHE GoalCompletion Load (0.0ms)[0m  [1m[34mSELECT "goal_completions".* FROM "goal_completions" WHERE "goal_completions"."goal_id" = $1 AND "goal_completions"."week_number" = $2 AND "goal_completions"."year" = $3 LIMIT $4[0m  [["goal_id", 3], ["week_number", 36], ["year", 2025], ["LIMIT", 1]]
+  ↳ app/models/goal_completion.rb:17:in `find_or_create_for_goal_and_week'
+  [1m[36mCACHE TodoItem Count (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."source_type" = $2 AND "todo_items"."source_id" = $3 AND "todo_items"."week_start_date" = $4 AND "todo_items"."completed" = $5[0m  [["user_id", 1], ["source_type", "Goal"], ["source_id", 3], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:189
+  [1m[36mCACHE Goal Load (0.0ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:187
+  [1m[36mCACHE GoalCompletion Load (0.0ms)[0m  [1m[34mSELECT "goal_completions".* FROM "goal_completions" WHERE "goal_completions"."goal_id" = $1 AND "goal_completions"."week_number" = $2 AND "goal_completions"."year" = $3 LIMIT $4[0m  [["goal_id", 3], ["week_number", 36], ["year", 2025], ["LIMIT", 1]]
+  ↳ app/models/goal_completion.rb:17:in `find_or_create_for_goal_and_week'
+  [1m[36mCACHE TodoItem Count (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."source_type" = $2 AND "todo_items"."source_id" = $3 AND "todo_items"."week_start_date" = $4 AND "todo_items"."completed" = $5[0m  [["user_id", 1], ["source_type", "Goal"], ["source_id", 3], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:189
+  [1m[36mGoal Load (0.3ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:187
+  [1m[36mGoalCompletion Load (7.5ms)[0m  [1m[34mSELECT "goal_completions".* FROM "goal_completions" WHERE "goal_completions"."goal_id" = $1 AND "goal_completions"."week_number" = $2 AND "goal_completions"."year" = $3 LIMIT $4[0m  [["goal_id", 4], ["week_number", 36], ["year", 2025], ["LIMIT", 1]]
+  ↳ app/models/goal_completion.rb:17:in `find_or_create_for_goal_and_week'
+  [1m[36mTodoItem Count (0.4ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."source_type" = $2 AND "todo_items"."source_id" = $3 AND "todo_items"."week_start_date" = $4 AND "todo_items"."completed" = $5[0m  [["user_id", 1], ["source_type", "Goal"], ["source_id", 4], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:189
+  [1m[36mGoal Load (0.2ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:187
+  [1m[36mGoalCompletion Load (0.3ms)[0m  [1m[34mSELECT "goal_completions".* FROM "goal_completions" WHERE "goal_completions"."goal_id" = $1 AND "goal_completions"."week_number" = $2 AND "goal_completions"."year" = $3 LIMIT $4[0m  [["goal_id", 5], ["week_number", 36], ["year", 2025], ["LIMIT", 1]]
+  ↳ app/models/goal_completion.rb:17:in `find_or_create_for_goal_and_week'
+  [1m[36mTodoItem Count (1.8ms)[0m  [1m[34mSELECT COUNT(*) FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."source_type" = $2 AND "todo_items"."source_id" = $3 AND "todo_items"."week_start_date" = $4 AND "todo_items"."completed" = $5[0m  [["user_id", 1], ["source_type", "Goal"], ["source_id", 5], ["week_start_date", "2025-09-01"], ["completed", true]]
+  ↳ app/views/dashboard/weekly.html.erb:189
+  [1m[36mAdHocTodo Load (0.3ms)[0m  [1m[34mSELECT "ad_hoc_todos".* FROM "ad_hoc_todos" WHERE "ad_hoc_todos"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:150
+  [1m[36mAdHocTodo Load (0.6ms)[0m  [1m[34mSELECT "ad_hoc_todos".* FROM "ad_hoc_todos" WHERE "ad_hoc_todos"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/views/dashboard/weekly.html.erb:150
+  Rendered dashboard/weekly.html.erb within layouts/application (Duration: 114.5ms | Allocations: 31571)
+  Rendered layout layouts/application.html.erb (Duration: 115.8ms | Allocations: 32800)
+Completed 200 OK in 121ms (Views: 85.3ms | ActiveRecord: 32.9ms | Allocations: 35116)
+
+

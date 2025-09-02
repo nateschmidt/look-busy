@@ -23,20 +23,20 @@ Rails.application.routes.draw do
   resources :ad_hoc_todos, only: [:create, :destroy]
   
   # Notes
-  resources :notes, only: [:create, :update]
+           resources :notes, only: [:create, :update]
   
   # Todo items
-  resources :todo_items, only: [:create, :update] do
-    member do
-      get :notes
-    end
-  end
+           resources :todo_items, only: [:create, :update] do
+           member do
+             get :notes
+           end
+         end
   
   # Dashboard
-  get 'dashboard/weekly', to: 'dashboard#weekly', as: :weekly_dashboard
-  get 'dashboard/weekly_report', to: 'dashboard#weekly_report', as: :weekly_report
-  post 'dashboard/generate_weekly_todos', to: 'dashboard#generate_weekly_todos', as: :generate_todos
-  delete 'dashboard/clear_todos', to: 'dashboard#clear_todos', as: :clear_todos
+           get 'dashboard/weekly', to: 'dashboard#weekly', as: :weekly_dashboard
+         get 'dashboard/weekly_report', to: 'dashboard#weekly_report', as: :weekly_report
+         post 'dashboard/generate_todos', to: 'dashboard#generate_todos', as: :generate_todos
+         delete 'dashboard/clear_todos', to: 'dashboard#clear_todos', as: :clear_todos
 
   # Defines the root path route ("/")
   root "pages#home"
