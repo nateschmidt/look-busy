@@ -90,22 +90,17 @@ class DashboardController < ApplicationController
     case filter
     when 'meetings'
       # Filter for meetings (RecurringMeeting and AdHocTodo with 'm' suffix)
-      meeting_items = todo_items.where(source_type: 'RecurringMeeting')
-      
-      # Add AdHocTodo items that end with ' m'
-      ad_hoc_meetings = todo_items.includes(:source)
-                                 .where(source_type: 'AdHocTodo')
-                                 .select { |item| item.source.description.end_with?(' m') }
-      
-      # Combine the two collections
-      meeting_items + ad_hoc_meetings
+      # Use a single query to maintain ordering
+      todo_items.includes(:source)
+                .where("source_type = 'RecurringMeeting' OR (source_type = 'AdHocTodo' AND source_id IN (?))", 
+                       current_user.ad_hoc_todos.where("description LIKE ?", '% m').pluck(:id))
     when 'goals'
       todo_items.where(source_type: 'Goal')
     when 'ad_hoc'
       # Filter for ad-hoc items (AdHocTodo without 'm' suffix)
       todo_items.includes(:source)
-                .where(source_type: 'AdHocTodo')
-                .select { |item| !item.source.description.end_with?(' m') }
+                .where("source_type = 'AdHocTodo' AND source_id IN (?)", 
+                       current_user.ad_hoc_todos.where("description NOT LIKE ?", '% m').pluck(:id))
     else
       # 'all' or no filter - return all items
       todo_items
