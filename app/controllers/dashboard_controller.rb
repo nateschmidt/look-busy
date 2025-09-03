@@ -84,6 +84,26 @@ class DashboardController < ApplicationController
     render layout: false
   end
 
+  def search
+    @query = params[:query]&.strip
+    
+    if @query.present?
+      # Search in todo item descriptions and notes
+      @todo_items = current_user.todo_items
+                                .includes(:notes, :source)
+                                .where("todo_items.description ILIKE ? OR notes.content ILIKE ?", 
+                                       "%#{@query}%", "%#{@query}%")
+                                .joins("LEFT JOIN notes ON notes.notable_type = 'TodoItem' AND notes.notable_id = todo_items.id")
+                                .distinct
+                                .order(week_start_date: :desc, created_at: :desc)
+    else
+      @todo_items = current_user.todo_items
+                                .includes(:notes, :source)
+                                .order(week_start_date: :desc, created_at: :desc)
+                                .limit(100) # Limit to most recent 100 items if no search query
+    end
+  end
+
   private
 
   def apply_filter(todo_items, filter)
