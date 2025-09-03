@@ -22,6 +22,9 @@ Rails.application.routes.draw do
   # Ad hoc todos
   resources :ad_hoc_todos, only: [:create, :destroy]
   
+  # Profiles
+  resource :profile, only: [:show, :edit, :update]
+  
   # Notes
            resources :notes, only: [:create, :update]
   

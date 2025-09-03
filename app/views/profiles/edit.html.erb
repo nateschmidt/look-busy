@@ -1,0 +1,55 @@
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow">
+        <div class="card-header bg-secondary text-white">
+          <h3 class="h5 mb-0">
+            <i class="bi bi-pencil me-2"></i>Edit Profile
+          </h3>
+        </div>
+        <div class="card-body">
+          <%= form_with model: @user, url: profile_path, method: :patch, local: true do |form| %>
+            <div class="mb-4">
+              <h5 class="mb-3">Change Password</h5>
+              
+
+              
+              <div class="mb-3">
+                <%= form.label :password, "New Password", class: "form-label" %>
+                <%= form.password_field :password, 
+                    class: "form-control #{'is-invalid' if @user.errors[:password].any?}",
+                    required: true,
+                    minlength: 6 %>
+                <% if @user.errors[:password].any? %>
+                  <div class="invalid-feedback">
+                    <%= @user.errors[:password].first %>
+                  </div>
+                <% end %>
+                <div class="form-text">Minimum 6 characters</div>
+              </div>
+              
+              <div class="mb-3">
+                <%= form.label :password_confirmation, "Confirm New Password", class: "form-label" %>
+                <%= form.password_field :password_confirmation, 
+                    class: "form-control #{'is-invalid' if @user.errors[:password_confirmation].any?}",
+                    required: true %>
+                <% if @user.errors[:password_confirmation].any? %>
+                  <div class="invalid-feedback">
+                    <%= @user.errors[:password_confirmation].first %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+            
+            <div class="d-flex gap-2">
+              <%= form.submit "Update Password", class: "btn btn-primary" %>
+              <%= link_to profile_path, class: "btn btn-outline-secondary" do %>
+                <i class="bi bi-arrow-left me-1"></i>Cancel
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
