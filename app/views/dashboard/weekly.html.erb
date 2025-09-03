@@ -64,7 +64,7 @@
               <% end %>
               
               <% if @todos_generated %>
-                <%= form_with url: clear_todos_path, method: :delete, local: true do |form| %>
+                <%= form_with url: clear_todos_path, data: { turbo_method: :delete }, local: true do |form| %>
                   <%= form.hidden_field :year, value: @selected_year %>
                   <%= form.hidden_field :week, value: @selected_week %>
                   <%= form.submit "Clear All To-dos", 
