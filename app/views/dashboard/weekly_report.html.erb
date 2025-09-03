@@ -28,6 +28,9 @@
     <div class="stats">
       <strong>Summary Statistics:</strong><br>
       • Completed Items: <%= @completed_items.count %><br>
+      • Meetings Completed: <%= @completed_items.where(source_type: 'RecurringMeeting').count %><br>
+      • Goals Completed: <%= @completed_items.where(source_type: 'Goal').count %><br>
+      • Ad Hoc Tasks Completed: <%= @completed_items.where(source_type: 'AdHocTodo').count %><br>
       <% if @completed_items.count > 0 %>
         • Items with Notes: <%= @completed_items.joins(:notes).count %>
       <% end %>
