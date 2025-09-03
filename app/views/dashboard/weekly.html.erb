@@ -55,7 +55,7 @@
             
             <!-- Buttons -->
             <div class="d-flex gap-2">
-              <%= form_with url: generate_todos_path, method: :post, local: true do |form| %>
+              <%= form_with url: generate_weekly_todos_path, method: :post, local: true do |form| %>
                 <%= form.hidden_field :year, value: @selected_year %>
                 <%= form.hidden_field :week, value: @selected_week %>
                 <%= form.submit "Generate To-dos", 

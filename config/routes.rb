@@ -39,7 +39,7 @@ Rails.application.routes.draw do
            get 'dashboard/weekly', to: 'dashboard#weekly', as: :weekly_dashboard
          get 'dashboard/weekly_report', to: 'dashboard#weekly_report', as: :weekly_report
          get 'dashboard/search', to: 'dashboard#search', as: :search_dashboard
-         post 'dashboard/generate_todos', to: 'dashboard#generate_todos', as: :generate_todos
+         post 'dashboard/generate_weekly_todos', to: 'dashboard#generate_weekly_todos', as: :generate_weekly_todos
          delete 'dashboard/clear_todos', to: 'dashboard#clear_todos', as: :clear_todos
 
   # Defines the root path route ("/")
