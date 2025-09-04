@@ -28,45 +28,98 @@
     <div class="stats">
       <strong>Summary Statistics:</strong><br>
       • Completed Items: <%= @completed_items.count %><br>
-      • Meetings Completed: <%= @completed_items.where(source_type: 'RecurringMeeting').count %><br>
+      • Meetings Completed: <%= @completed_items.where(source_type: 'RecurringMeeting').count + @completed_items.where(source_type: 'AdHocTodo').joins("JOIN ad_hoc_todos ON ad_hoc_todos.id = todo_items.source_id").where("ad_hoc_todos.description LIKE ?", "% m").count %><br>
       • Goals Completed: <%= @completed_items.where(source_type: 'Goal').count %><br>
-      • Ad Hoc Tasks Completed: <%= @completed_items.where(source_type: 'AdHocTodo').count %><br>
+      • Ad Hoc Tasks Completed: <%= @completed_items.where(source_type: 'AdHocTodo').joins("JOIN ad_hoc_todos ON ad_hoc_todos.id = todo_items.source_id").where("ad_hoc_todos.description NOT LIKE ?", "% m").count %><br>
       <% if @completed_items.count > 0 %>
         • Items with Notes: <%= @completed_items.joins(:notes).count %>
       <% end %>
     </div>
 
-    <div class="section">
-      <div class="section-title">COMPLETED ITEMS</div>
-      <% if @completed_items.any? %>
-        <% @completed_items.each do |item| %>
-          <div class="item">
-            <div class="item-title">✓ <%= item.description %></div>
-            <div class="item-description">
-              <strong>Type:</strong> 
-              <% case item.source_type %>
-                <% when 'RecurringMeeting' %>
+    <% if @completed_items.any? %>
+      <!-- MEETINGS SECTION -->
+      <% meetings = @completed_items.where(source_type: 'RecurringMeeting') + 
+                    @completed_items.where(source_type: 'AdHocTodo').joins("JOIN ad_hoc_todos ON ad_hoc_todos.id = todo_items.source_id").where("ad_hoc_todos.description LIKE ?", "% m") %>
+      <% if meetings.any? %>
+        <div class="section">
+          <div class="section-title">MEETINGS</div>
+          <% meetings.each do |item| %>
+            <div class="item">
+              <div class="item-title">✓ <%= item.description %></div>
+              <div class="item-description">
+                <strong>Type:</strong> 
+                <% if item.source_type == 'RecurringMeeting' %>
                   Recurring Meeting
-                <% when 'Goal' %>
-                  Weekly Goal
-                <% when 'AdHocTodo' %>
-                  Ad Hoc Task
-              <% end %>
-            </div>
-            <% if item.notes.any? %>
-              <div class="item-notes">
-                <strong>Notes:</strong><br>
-                <% item.notes.each do |note| %>
-                  • <%= note.content %><br>
+                <% else %>
+                  One-time Meeting
                 <% end %>
               </div>
-            <% end %>
-          </div>
-        <% end %>
-      <% else %>
-        <div class="item">No items completed this week.</div>
+              <% if item.notes.any? %>
+                <div class="item-notes">
+                  <strong>Notes:</strong><br>
+                  <% item.notes.each do |note| %>
+                    • <%= note.content %><br>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
       <% end %>
-    </div>
+
+      <!-- GOALS SECTION -->
+      <% goals = @completed_items.where(source_type: 'Goal') %>
+      <% if goals.any? %>
+        <div class="section">
+          <div class="section-title">GOALS</div>
+          <% goals.each do |item| %>
+            <div class="item">
+              <div class="item-title">✓ <%= item.description %></div>
+              <div class="item-description">
+                <strong>Type:</strong> Weekly Goal
+              </div>
+              <% if item.notes.any? %>
+                <div class="item-notes">
+                  <strong>Notes:</strong><br>
+                  <% item.notes.each do |note| %>
+                    • <%= note.content %><br>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+
+      <!-- AD HOC TASKS SECTION -->
+      <% adhoc_tasks = @completed_items.where(source_type: 'AdHocTodo').joins("JOIN ad_hoc_todos ON ad_hoc_todos.id = todo_items.source_id").where("ad_hoc_todos.description NOT LIKE ?", "% m") %>
+      <% if adhoc_tasks.any? %>
+        <div class="section">
+          <div class="section-title">AD HOC TASKS</div>
+          <% adhoc_tasks.each do |item| %>
+            <div class="item">
+              <div class="item-title">✓ <%= item.description %></div>
+              <div class="item-description">
+                <strong>Type:</strong> Ad Hoc Task
+              </div>
+              <% if item.notes.any? %>
+                <div class="item-notes">
+                  <strong>Notes:</strong><br>
+                  <% item.notes.each do |note| %>
+                    • <%= note.content %><br>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="section">
+        <div class="section-title">COMPLETED ITEMS</div>
+        <div class="item">No items completed this week.</div>
+      </div>
+    <% end %>
   </div>
 
   <script>
