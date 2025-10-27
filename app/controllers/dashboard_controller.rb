@@ -12,11 +12,21 @@ class DashboardController < ApplicationController
     @current_week_start = Date.commercial(@selected_year, @selected_week, 1)
     @current_week_end = Date.commercial(@selected_year, @selected_week, 7)
     
-    # Get all todo items for the selected week, ordered by completion status then creation date
+    # Get all todo items for the selected week, ordered by type (meetings first), then completion status, then creation date
     @todo_items = current_user.todo_items
                               .where(week_start_date: @current_week_start)
-                              .includes(:notes)
-                              .order(:completed, :created_at)
+                              .includes(:notes, :source)
+                              .order(
+                                Arel.sql("CASE 
+                                  WHEN source_type = 'RecurringMeeting' THEN 1
+                                  WHEN source_type = 'AdHocTodo' AND source_id IN (
+                                    SELECT id FROM ad_hoc_todos WHERE description LIKE '% m'
+                                  ) THEN 1
+                                  ELSE 2
+                                END"),
+                                :completed, 
+                                :created_at
+                              )
     
     # Apply filter if specified
     @todo_items = apply_filter(@todo_items, params[:filter])
