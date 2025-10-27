@@ -225,12 +225,16 @@
                       <button class="btn btn-sm btn-link text-secondary p-0 view-notes-btn" 
                               data-todo-id="<%= todo_item.id %>"
                               data-notes="<%= todo_item.notes.map(&:content).join(' | ') %>"
+                              data-bs-toggle="modal" 
+                              data-bs-target="#noteModal"
                               title="View notes">
                         <i class="bi bi-journal-text"></i>
                       </button>
                     <% else %>
                       <button class="btn btn-sm btn-link text-muted p-0 add-notes-btn" 
                               data-todo-id="<%= todo_item.id %>"
+                              data-bs-toggle="modal" 
+                              data-bs-target="#noteModal"
                               title="Add notes">
                         <i class="bi bi-journal-plus"></i>
                       </button>
@@ -324,4 +328,26 @@ function submitNoteForm(action) {
   // Submit the form
   form.submit();
 }
+
+// Handle notes button clicks
+document.addEventListener('DOMContentLoaded', function() {
+  // Add event listeners for both add-notes-btn and view-notes-btn
+  document.querySelectorAll('.add-notes-btn, .view-notes-btn').forEach(function(button) {
+    button.addEventListener('click', function() {
+      const todoId = this.getAttribute('data-todo-id');
+      const existingNotes = this.getAttribute('data-notes') || '';
+      
+      // Set the form fields
+      document.getElementById('note_notable_type').value = 'TodoItem';
+      document.getElementById('note_notable_id').value = todoId;
+      document.getElementById('note_id').value = ''; // Clear for new notes
+      
+      // Set the textarea content
+      const textarea = document.querySelector('#noteForm textarea[name="note[content]"]');
+      if (textarea) {
+        textarea.value = existingNotes;
+      }
+    });
+  });
+});
 </script>
