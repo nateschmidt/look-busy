@@ -6,6 +6,17 @@ class NotesController < ApplicationController
     @note = current_user.notes.build(note_params)
     
     if @note.save
+      # Check if we should also mark the item as complete
+      if params[:action] == "add_notes_and_complete" && @note.notable_type == 'TodoItem'
+        todo_item = current_user.todo_items.find(@note.notable_id)
+        todo_item.update(completed: true)
+        
+        # Track goal completion if applicable
+        if todo_item.source_type == 'Goal'
+          track_goal_completion(todo_item.source, todo_item.week_start_date)
+        end
+      end
+      
       redirect_to weekly_dashboard_path, notice: 'Note added successfully!'
     else
       redirect_to weekly_dashboard_path, alert: 'Failed to add note.'
@@ -16,6 +27,17 @@ class NotesController < ApplicationController
     @note = current_user.notes.find(params[:id])
     
     if @note.update(note_params)
+      # Check if we should also mark the item as complete
+      if params[:action] == "add_notes_and_complete" && @note.notable_type == 'TodoItem'
+        todo_item = current_user.todo_items.find(@note.notable_id)
+        todo_item.update(completed: true)
+        
+        # Track goal completion if applicable
+        if todo_item.source_type == 'Goal'
+          track_goal_completion(todo_item.source, todo_item.week_start_date)
+        end
+      end
+      
       redirect_to weekly_dashboard_path
     else
       redirect_to weekly_dashboard_path, alert: 'Failed to update note.'
