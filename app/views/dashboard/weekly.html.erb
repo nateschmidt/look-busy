@@ -303,10 +303,25 @@
         </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-              <%= form.submit "Add Notes", class: "btn btn-primary", name: "note_action", value: "add_notes" %>
-              <%= form.submit "Add/Update + Mark Done", class: "btn btn-success", name: "note_action", value: "add_notes_and_complete" %>
+              <button type="button" class="btn btn-primary" onclick="submitNoteForm('add_notes')">Add Notes</button>
+              <button type="button" class="btn btn-success" onclick="submitNoteForm('add_notes_and_complete')">Add/Update + Mark Done</button>
             </div>
       <% end %>
     </div>
   </div>
 </div>
+
+<script>
+function submitNoteForm(action) {
+  // Find the form and add a hidden input with the action
+  const form = document.querySelector('#noteModal form');
+  const hiddenInput = document.createElement('input');
+  hiddenInput.type = 'hidden';
+  hiddenInput.name = 'note_action';
+  hiddenInput.value = action;
+  form.appendChild(hiddenInput);
+  
+  // Submit the form
+  form.submit();
+}
+</script>
