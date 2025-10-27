@@ -38963,3 +38963,87 @@ Processing by DashboardController#weekly as HTML
 Completed 200 OK in 82ms (Views: 59.5ms | ActiveRecord: 20.4ms | Allocations: 34871)
 
 
+  [1m[36mUser Load (1.4ms)[0m  [1m[34mSELECT "users".* FROM "users" ORDER BY "users"."id" ASC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[36mTodoItem Load (1.0ms)[0m  [1m[34mSELECT "todo_items".* FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."week_start_date" = $2[0m  [["user_id", 1], ["week_start_date", "2025-10-27"]]
+  [1m[36mRecurringMeeting Load (0.6ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."user_id" = $1 ORDER BY "recurring_meetings"."id" ASC LIMIT $2[0m  [["user_id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mAdHocTodo Create (2.8ms)[0m  [1m[32mINSERT INTO "ad_hoc_todos" ("description", "user_id", "completed", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["description", "Test Ad-hoc Meeting m"], ["user_id", 1], ["completed", false], ["created_at", "2025-10-27 13:39:38.589708"], ["updated_at", "2025-10-27 13:39:38.589708"]]
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mAdHocTodo Create (0.6ms)[0m  [1m[32mINSERT INTO "ad_hoc_todos" ("description", "user_id", "completed", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["description", "Test Ad-hoc Todo"], ["user_id", 1], ["completed", false], ["created_at", "2025-10-27 13:39:38.594708"], ["updated_at", "2025-10-27 13:39:38.594708"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mGoal Load (0.8ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."user_id" = $1 ORDER BY "goals"."id" ASC LIMIT $2[0m  [["user_id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTodoItem Create (2.0ms)[0m  [1m[32mINSERT INTO "todo_items" ("description", "user_id", "source_type", "source_id", "completed", "created_at", "updated_at", "week_start_date") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["description", "Recurring Meeting"], ["user_id", 1], ["source_type", "RecurringMeeting"], ["source_id", 1], ["completed", false], ["created_at", "2025-10-27 13:39:38.606869"], ["updated_at", "2025-10-27 13:39:38.606869"], ["week_start_date", "2025-10-27"]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTodoItem Create (0.6ms)[0m  [1m[32mINSERT INTO "todo_items" ("description", "user_id", "source_type", "source_id", "completed", "created_at", "updated_at", "week_start_date") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["description", "Ad-hoc Meeting"], ["user_id", 1], ["source_type", "AdHocTodo"], ["source_id", 35], ["completed", false], ["created_at", "2025-10-27 13:39:38.610701"], ["updated_at", "2025-10-27 13:39:38.610701"], ["week_start_date", "2025-10-27"]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTodoItem Create (0.8ms)[0m  [1m[32mINSERT INTO "todo_items" ("description", "user_id", "source_type", "source_id", "completed", "created_at", "updated_at", "week_start_date") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["description", "Ad-hoc Todo"], ["user_id", 1], ["source_type", "AdHocTodo"], ["source_id", 36], ["completed", false], ["created_at", "2025-10-27 13:39:38.621731"], ["updated_at", "2025-10-27 13:39:38.621731"], ["week_start_date", "2025-10-27"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTodoItem Create (0.6ms)[0m  [1m[32mINSERT INTO "todo_items" ("description", "user_id", "source_type", "source_id", "completed", "created_at", "updated_at", "week_start_date") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["description", "Goal Todo"], ["user_id", 1], ["source_type", "Goal"], ["source_id", 1], ["completed", false], ["created_at", "2025-10-27 13:39:38.623763"], ["updated_at", "2025-10-27 13:39:38.623763"], ["week_start_date", "2025-10-27"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTodoItem Load (0.9ms)[0m  [1m[34mSELECT "todo_items".* FROM "todo_items" WHERE "todo_items"."user_id" = $1 AND "todo_items"."week_start_date" = $2 ORDER BY CASE 
+                     WHEN source_type = 'RecurringMeeting' THEN 1
+                     WHEN source_type = 'AdHocTodo' AND source_id IN (
+                       SELECT id FROM ad_hoc_todos WHERE description LIKE '% m'
+                     ) THEN 1
+                     ELSE 2
+                   END, "todo_items"."completed" ASC, "todo_items"."created_at" ASC[0m  [["user_id", 1], ["week_start_date", "2025-10-27"]]
+  [1m[36mNote Load (1.4ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."notable_type" = $1 AND "notes"."notable_id" IN ($2, $3, $4, $5)[0m  [["notable_type", "TodoItem"], ["notable_id", 266], ["notable_id", 267], ["notable_id", 268], ["notable_id", 269]]
+  [1m[36mRecurringMeeting Load (0.1ms)[0m  [1m[34mSELECT "recurring_meetings".* FROM "recurring_meetings" WHERE "recurring_meetings"."id" = $1[0m  [["id", 1]]
+  [1m[36mAdHocTodo Load (0.1ms)[0m  [1m[34mSELECT "ad_hoc_todos".* FROM "ad_hoc_todos" WHERE "ad_hoc_todos"."id" IN ($1, $2)[0m  [["id", 35], ["id", 36]]
+  [1m[36mGoal Load (0.1ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1[0m  [["id", 1]]
+  [1m[36mUser Load (1.0ms)[0m  [1m[34mSELECT "users".* FROM "users" ORDER BY "users"."id" ASC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mGoal Load (0.6ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mTodoItem Create (1.2ms)[0m  [1m[32mINSERT INTO "todo_items" ("description", "user_id", "source_type", "source_id", "completed", "created_at", "updated_at", "week_start_date") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["description", "Test Todo Item"], ["user_id", 1], ["source_type", "Goal"], ["source_id", 1], ["completed", false], ["created_at", "2025-10-27 18:45:28.884482"], ["updated_at", "2025-10-27 18:45:28.884482"], ["week_start_date", "2025-10-27"]]
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mNote Count (1.5ms)[0m  [1m[34mSELECT COUNT(*) FROM "notes" WHERE "notes"."notable_id" = $1 AND "notes"."notable_type" = $2[0m  [["notable_id", 270], ["notable_type", "TodoItem"]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTodoItem Load (0.2ms)[0m  [1m[34mSELECT "todo_items".* FROM "todo_items" WHERE "todo_items"."id" = $1 LIMIT $2[0m  [["id", 270], ["LIMIT", 1]]
+  [1m[36mNote Create (1.3ms)[0m  [1m[32mINSERT INTO "notes" ("content", "user_id", "notable_type", "notable_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["content", "Test note content"], ["user_id", 1], ["notable_type", "TodoItem"], ["notable_id", 270], ["created_at", "2025-10-27 18:45:28.898113"], ["updated_at", "2025-10-27 18:45:28.898113"]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTodoItem Load (0.1ms)[0m  [1m[34mSELECT "todo_items".* FROM "todo_items" WHERE "todo_items"."id" = $1 LIMIT $2[0m  [["id", 270], ["LIMIT", 1]]
+  [1m[36mNote Count (0.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "notes" WHERE "notes"."notable_id" = $1 AND "notes"."notable_type" = $2[0m  [["notable_id", 270], ["notable_type", "TodoItem"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mGoal Load (0.1ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mTodoItem Create (0.2ms)[0m  [1m[32mINSERT INTO "todo_items" ("description", "user_id", "source_type", "source_id", "completed", "created_at", "updated_at", "week_start_date") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["description", "Test Todo Item 2"], ["user_id", 1], ["source_type", "Goal"], ["source_id", 1], ["completed", false], ["created_at", "2025-10-27 18:45:28.903702"], ["updated_at", "2025-10-27 18:45:28.903702"], ["week_start_date", "2025-10-27"]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTodoItem Load (0.2ms)[0m  [1m[34mSELECT "todo_items".* FROM "todo_items" WHERE "todo_items"."id" = $1 LIMIT $2[0m  [["id", 271], ["LIMIT", 1]]
+  [1m[36mNote Create (0.3ms)[0m  [1m[32mINSERT INTO "notes" ("content", "user_id", "notable_type", "notable_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["content", "Test note with completion"], ["user_id", 1], ["notable_type", "TodoItem"], ["notable_id", 271], ["created_at", "2025-10-27 18:45:28.906698"], ["updated_at", "2025-10-27 18:45:28.906698"]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTodoItem Update (0.7ms)[0m  [1m[33mUPDATE "todo_items" SET "completed" = $1, "updated_at" = $2 WHERE "todo_items"."id" = $3[0m  [["completed", true], ["updated_at", "2025-10-27 18:45:28.908231"], ["id", 271]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTodoItem Load (0.1ms)[0m  [1m[34mSELECT "todo_items".* FROM "todo_items" WHERE "todo_items"."id" = $1 LIMIT $2[0m  [["id", 271], ["LIMIT", 1]]
+  [1m[36mNote Count (0.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "notes" WHERE "notes"."notable_id" = $1 AND "notes"."notable_type" = $2[0m  [["notable_id", 271], ["notable_type", "TodoItem"]]
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" ORDER BY "users"."id" ASC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mGoal Load (0.6ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mTodoItem Create (1.1ms)[0m  [1m[32mINSERT INTO "todo_items" ("description", "user_id", "source_type", "source_id", "completed", "created_at", "updated_at", "week_start_date") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["description", "Test Todo for Completion"], ["user_id", 1], ["source_type", "Goal"], ["source_id", 1], ["completed", false], ["created_at", "2025-10-27 18:52:41.426738"], ["updated_at", "2025-10-27 18:52:41.426738"], ["week_start_date", "2025-10-27"]]
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTodoItem Load (0.4ms)[0m  [1m[34mSELECT "todo_items".* FROM "todo_items" WHERE "todo_items"."id" = $1 LIMIT $2[0m  [["id", 272], ["LIMIT", 1]]
+  [1m[36mNote Create (1.0ms)[0m  [1m[32mINSERT INTO "notes" ("content", "user_id", "notable_type", "notable_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["content", "Test note with completion"], ["user_id", 1], ["notable_type", "TodoItem"], ["notable_id", 272], ["created_at", "2025-10-27 18:52:41.439526"], ["updated_at", "2025-10-27 18:52:41.439526"]]
+  [1m[36mTRANSACTION (0.9ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTodoItem Update (0.9ms)[0m  [1m[33mUPDATE "todo_items" SET "completed" = $1, "updated_at" = $2 WHERE "todo_items"."id" = $3[0m  [["completed", true], ["updated_at", "2025-10-27 18:52:41.442574"], ["id", 272]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTodoItem Load (0.3ms)[0m  [1m[34mSELECT "todo_items".* FROM "todo_items" WHERE "todo_items"."id" = $1 LIMIT $2[0m  [["id", 272], ["LIMIT", 1]]
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" ORDER BY "users"."id" ASC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mGoal Load (0.3ms)[0m  [1m[34mSELECT "goals".* FROM "goals" WHERE "goals"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mTodoItem Create (0.6ms)[0m  [1m[32mINSERT INTO "todo_items" ("description", "user_id", "source_type", "source_id", "completed", "created_at", "updated_at", "week_start_date") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["description", "Test Todo for Completion v2"], ["user_id", 1], ["source_type", "Goal"], ["source_id", 1], ["completed", false], ["created_at", "2025-10-27 18:53:02.773231"], ["updated_at", "2025-10-27 18:53:02.773231"], ["week_start_date", "2025-10-27"]]
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTodoItem Load (2.9ms)[0m  [1m[34mSELECT "todo_items".* FROM "todo_items" WHERE "todo_items"."id" = $1 LIMIT $2[0m  [["id", 273], ["LIMIT", 1]]
+  [1m[36mNote Create (2.1ms)[0m  [1m[32mINSERT INTO "notes" ("content", "user_id", "notable_type", "notable_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["content", "Test note with completion v2"], ["user_id", 1], ["notable_type", "TodoItem"], ["notable_id", 273], ["created_at", "2025-10-27 18:53:02.786706"], ["updated_at", "2025-10-27 18:53:02.786706"]]
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (1.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTodoItem Update (3.4ms)[0m  [1m[33mUPDATE "todo_items" SET "completed" = $1, "updated_at" = $2 WHERE "todo_items"."id" = $3[0m  [["completed", true], ["updated_at", "2025-10-27 18:53:02.790319"], ["id", 273]]
+  [1m[36mTRANSACTION (1.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTodoItem Load (0.8ms)[0m  [1m[34mSELECT "todo_items".* FROM "todo_items" WHERE "todo_items"."id" = $1 LIMIT $2[0m  [["id", 273], ["LIMIT", 1]]
