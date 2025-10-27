@@ -303,8 +303,8 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <%= form.submit "Add Notes", class: "btn btn-primary", name: "action", value: "add_notes" %>
-          <%= form.submit "Add Notes and Mark As Complete", class: "btn btn-success", name: "action", value: "add_notes_and_complete" %>
+          <button type="submit" class="btn btn-primary" name="note_action" value="add_notes">Add Notes</button>
+          <button type="submit" class="btn btn-success" name="note_action" value="add_notes_and_complete">Add/Update + Mark Done</button>
         </div>
       <% end %>
     </div>

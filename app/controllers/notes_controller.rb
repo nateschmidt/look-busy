@@ -7,7 +7,7 @@ class NotesController < ApplicationController
     
     if @note.save
       # Check if we should also mark the item as complete
-      if params[:action] == "add_notes_and_complete" && @note.notable_type == 'TodoItem'
+      if params[:note_action] == "add_notes_and_complete" && @note.notable_type == 'TodoItem'
         todo_item = current_user.todo_items.find(@note.notable_id)
         todo_item.update(completed: true)
         
@@ -28,7 +28,7 @@ class NotesController < ApplicationController
     
     if @note.update(note_params)
       # Check if we should also mark the item as complete
-      if params[:action] == "add_notes_and_complete" && @note.notable_type == 'TodoItem'
+      if params[:note_action] == "add_notes_and_complete" && @note.notable_type == 'TodoItem'
         todo_item = current_user.todo_items.find(@note.notable_id)
         todo_item.update(completed: true)
         
