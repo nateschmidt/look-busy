@@ -340,7 +340,7 @@ document.addEventListener('DOMContentLoaded', function() {
       // Set the form fields
       document.getElementById('note_notable_type').value = 'TodoItem';
       document.getElementById('note_notable_id').value = todoId;
-      document.getElementById('note_id').value = ''; // Clear for new notes
+      document.getElementById('note_id').value = ''; // Always clear for create action
       
       // Set the textarea content
       const textarea = document.querySelector('#noteForm textarea[name="note[content]"]');

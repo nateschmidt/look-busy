@@ -3,23 +3,50 @@ class NotesController < ApplicationController
   before_action :set_note, only: [:update]
 
   def create
-    @note = current_user.notes.build(note_params)
+    # Check if there's already a note for this todo item
+    existing_note = current_user.notes.find_by(
+      notable_type: note_params[:notable_type], 
+      notable_id: note_params[:notable_id]
+    )
     
-    if @note.save
-      # Check if we should also mark the item as complete
-      if params[:note_action] == "add_notes_and_complete" && @note.notable_type == 'TodoItem'
-        todo_item = current_user.todo_items.find(@note.notable_id)
-        todo_item.update(completed: true)
-        
-        # Track goal completion if applicable
-        if todo_item.source_type == 'Goal'
-          track_goal_completion(todo_item.source, todo_item.week_start_date)
+    if existing_note
+      # Update the existing note instead of creating a new one
+      if existing_note.update(content: note_params[:content])
+        # Check if we should also mark the item as complete
+        if params[:note_action] == "add_notes_and_complete" && existing_note.notable_type == 'TodoItem'
+          todo_item = current_user.todo_items.find(existing_note.notable_id)
+          todo_item.update(completed: true)
+          
+          # Track goal completion if applicable
+          if todo_item.source_type == 'Goal'
+            track_goal_completion(todo_item.source, todo_item.week_start_date)
+          end
         end
+        
+        redirect_to weekly_dashboard_path, notice: 'Note updated successfully!'
+      else
+        redirect_to weekly_dashboard_path, alert: 'Failed to update note.'
       end
-      
-      redirect_to weekly_dashboard_path, notice: 'Note added successfully!'
     else
-      redirect_to weekly_dashboard_path, alert: 'Failed to add note.'
+      # Create a new note
+      @note = current_user.notes.build(note_params)
+      
+      if @note.save
+        # Check if we should also mark the item as complete
+        if params[:note_action] == "add_notes_and_complete" && @note.notable_type == 'TodoItem'
+          todo_item = current_user.todo_items.find(@note.notable_id)
+          todo_item.update(completed: true)
+          
+          # Track goal completion if applicable
+          if todo_item.source_type == 'Goal'
+            track_goal_completion(todo_item.source, todo_item.week_start_date)
+          end
+        end
+        
+        redirect_to weekly_dashboard_path, notice: 'Note added successfully!'
+      else
+        redirect_to weekly_dashboard_path, alert: 'Failed to add note.'
+      end
     end
   end
 
