@@ -317,37 +317,45 @@
 
 <script>
 function submitNoteForm(action) {
-  // Find the form and add a hidden input with the action
   const form = document.querySelector('#noteForm');
+  if (!form) return;
+
+  // Remove any previous action input before adding a new one
+  const previousActionInput = form.querySelector('input[name="note_action"]');
+  if (previousActionInput) previousActionInput.remove();
+
   const hiddenInput = document.createElement('input');
   hiddenInput.type = 'hidden';
   hiddenInput.name = 'note_action';
   hiddenInput.value = action;
   form.appendChild(hiddenInput);
-  
-  // Submit the form
+
   form.submit();
 }
 
-// Handle notes button clicks
-document.addEventListener('DOMContentLoaded', function() {
-  // Add event listeners for both add-notes-btn and view-notes-btn
+function initializeNoteModalHandlers() {
   document.querySelectorAll('.add-notes-btn, .view-notes-btn').forEach(function(button) {
+    if (button.dataset.noteModalInitialized === 'true') return;
+
+    button.dataset.noteModalInitialized = 'true';
+
     button.addEventListener('click', function() {
       const todoId = this.getAttribute('data-todo-id');
       const existingNotes = this.getAttribute('data-notes') || '';
-      
-      // Set the form fields
-      document.getElementById('note_notable_type').value = 'TodoItem';
-      document.getElementById('note_notable_id').value = todoId;
-      document.getElementById('note_id').value = ''; // Always clear for create action
-      
-      // Set the textarea content
+
+      const notableTypeField = document.getElementById('note_notable_type');
+      const notableIdField = document.getElementById('note_notable_id');
+      const noteIdField = document.getElementById('note_id');
       const textarea = document.querySelector('#noteForm textarea[name="note[content]"]');
-      if (textarea) {
-        textarea.value = existingNotes;
-      }
+
+      if (notableTypeField) notableTypeField.value = 'TodoItem';
+      if (notableIdField) notableIdField.value = todoId || '';
+      if (noteIdField) noteIdField.value = '';
+      if (textarea) textarea.value = existingNotes;
     });
   });
-});
+}
+
+document.addEventListener('DOMContentLoaded', initializeNoteModalHandlers);
+document.addEventListener('turbo:load', initializeNoteModalHandlers);
 </script>
