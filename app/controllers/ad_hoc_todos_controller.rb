@@ -9,8 +9,8 @@ class AdHocTodosController < ApplicationController
     is_meeting = @ad_hoc_todo.description.end_with?(" m")
     
     # Get week/year from params or use current week
-    year = params[:year]&.to_i || params.dig(:ad_hoc_todo, :year)&.to_i || Date.current.year
-    week = params[:week]&.to_i || params.dig(:ad_hoc_todo, :week)&.to_i || Date.current.cweek
+    year = params[:year]&.to_i || Date.current.year
+    week = params[:week]&.to_i || Date.current.cweek
     week_start_date = Date.commercial(year, week, 1)
     
     if @ad_hoc_todo.save
@@ -45,7 +45,7 @@ class AdHocTodosController < ApplicationController
   end
 
   def ad_hoc_todo_params
-    params.require(:ad_hoc_todo).permit(:description, :year, :week)
+    params.require(:ad_hoc_todo).permit(:description)
   end
   
   def extract_year_from_referrer
