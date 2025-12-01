@@ -90,6 +90,8 @@
         </div>
         <div class="card-body d-flex flex-column justify-content-center">
           <%= form_with model: AdHocTodo.new, local: true do |form| %>
+            <%= form.hidden_field :year, value: @selected_year %>
+            <%= form.hidden_field :week, value: @selected_week %>
             <div class="mb-3">
               <%= form.text_field :description, 
                   class: "form-control", 
@@ -297,6 +299,8 @@
           <%= form.hidden_field :notable_type, id: "note_notable_type" %>
           <%= form.hidden_field :notable_id, id: "note_notable_id" %>
           <%= form.hidden_field :id, id: "note_id" %>
+          <%= hidden_field_tag :year, @selected_year, id: "note_year" %>
+          <%= hidden_field_tag :week, @selected_week, id: "note_week" %>
           
           <div class="mb-3">
             <%= form.text_area :content, 
